@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
+const Appointment = require("./Appointment");
 
 const Customer = sequelize.define(
 	"Customer",
@@ -20,9 +21,10 @@ const Customer = sequelize.define(
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		cust_id: {
+		custId: {
 			type: DataTypes.UUID,
 			defaultValue: DataTypes.UUIDV4,
+			primaryKey: true,
 		},
 	},
 	{
@@ -30,4 +32,10 @@ const Customer = sequelize.define(
 	}
 );
 
+Customer.hasMany(Appointment, {
+	foreignKey: "custId",
+});
+Appointment.belongsTo(Customer, {
+	foreignKey: "custId",
+});
 module.exports = Customer;

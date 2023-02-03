@@ -2,8 +2,8 @@ const Customer = require("../model/Customer");
 const bcrypt = require("bcrypt");
 const createUserSchema = require("../validationjoi/newcustomer");
 
-function handleGetAllCustomers(req, res) {
-	const customers = Customer.findAll();
+async function handleGetAllCustomers(req, res) {
+	const customers = await Customer.findAll();
 	res.json({ message: "success", customers });
 }
 

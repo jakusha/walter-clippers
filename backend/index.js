@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const db = require("./config/db");
 const customerRouter = require("./router/customer");
 const appointmentRouter = require("./router/appointment");
+const hairStyleRouter = require("./router/hairstyle");
 app.use(cors());
 // logger middleware
 app.use(morgan("dev"));
@@ -24,17 +25,11 @@ app.get("/", (req, res) => {
 
 app.use("/customer", customerRouter);
 app.use("/appointment", appointmentRouter);
+app.use("/hairstyle", hairStyleRouter);
+
 const PORT = 3000;
 
-// db.sync()
-// 	.then(() => {
-// 		console.log("Connected to postgres database sucessfully");
-
-// 		console.log("Synced db.");
-// 	})
-// 	.catch((err) => {
-// 		console.log("Failed to sync db: " + err.message);
-// 	});
+//connect to database and start server
 const startDb = async () => {
 	try {
 		await db.authenticate();

@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
+const HairStyle = require("./HairStyle");
 
 const Appointment = sequelize.define(
 	"Appointment",
@@ -7,7 +8,6 @@ const Appointment = sequelize.define(
 		date: {
 			type: DataTypes.DATEONLY,
 			allowNull: false,
-			defaultValue: Date.now(),
 		},
 		time: {
 			type: DataTypes.TIME,
@@ -21,14 +21,38 @@ const Appointment = sequelize.define(
 			type: DataTypes.BOOLEAN,
 			defaultValue: false,
 		},
-		appointmnetId: {
+		appointmentId: {
 			type: DataTypes.UUID,
 			defaultValue: DataTypes.UUIDV4,
+			primaryKey: true,
+		},
+		custId: {
+			type: DataTypes.UUID,
+			allowNull: false,
+			references: {
+				model: "Customer",
+				key: "custId",
+			},
+		},
+		hairStyleId: {
+			type: DataTypes.UUID,
+			allowNull: false,
+			references: {
+				model: "HairStyle",
+				key: "hairStyleId",
+			},
 		},
 	},
 	{
 		freezeTableName: true,
 	}
 );
+
+HairStyle.hasOne(Appointment, {
+	foreignKey: "hairStyleId",
+});
+Appointment.belongsTo(HairStyle, {
+	foreignKey: "hairStyleId",
+});
 
 module.exports = Appointment;
