@@ -1,7 +1,8 @@
 const Customer = require("../model/Customer");
 const bcrypt = require("bcrypt");
-const createUserSchema = require("../validationjoi/newcustomer");
-
+const createUserSchema = require("../validationjoi/customers/newcustomer");
+const updateCustomer = require("../validationjoi/customers/updateCustomer");
+const { Op } = require("sequelize");
 async function handleGetAllCustomers(req, res) {
 	const customers = await Customer.findAll();
 	res.json({ message: "success", customers });
@@ -48,4 +49,86 @@ async function handleCreateCustomer(req, res) {
 		return res.status(500).json({ message: error.message });
 	}
 }
-module.exports = { handleGetAllCustomers, handleCreateCustomer };
+
+async function handleUpdateCustomer(req, res) {
+	const custId = req.params.custId;
+
+	const { value, error } = updateCustomer.validate(req.body);
+
+	if (error) {
+		return res.json({ message: error.message }).status(400);
+	}
+
+	try {
+		//check valid appointment id
+		const result = await Customer.findByPk(custId);
+		if (result) {
+			console.log(value, "asdadadasd=======11111110000000000");
+
+			//check if username and email is available
+			const foundUserInfo = await Customer.findOne({
+				where: {
+					[Op.or]: [
+						{ username: value.username },
+						{ email: value.email },
+					],
+				},
+			});
+
+			console.log(foundUserInfo);
+
+			if (foundUserInfo)
+				return res
+					.json({ message: "username or email is not available" })
+					.status(400);
+
+			await Customer.update(
+				{
+					...value,
+				},
+				{
+					where: {
+						custId: custId,
+					},
+				}
+			);
+			return res.json({
+				message: "customer successfully updated",
+			});
+		} else {
+			return res.json({ message: "invalid customer id" }).status(400);
+		}
+	} catch (error) {
+		return res.json({ error: error.message }).status(500);
+	}
+}
+
+async function handleDeleteCustomer(req, res) {
+	const custId = req.params.custId;
+
+	try {
+		const result = await Customer.findByPk(custId);
+
+		console.log(result);
+		if (result) {
+			await Customer.destroy({
+				where: {
+					custId: custId,
+				},
+			});
+			return res.json({ message: "Customer deleted successfull" });
+		} else {
+			return res
+				.status(400)
+				.json({ message: `Customer ID ${custId} not found` });
+		}
+	} catch (error) {
+		return res.json({ error: error.message }).status(500);
+	}
+}
+module.exports = {
+	handleGetAllCustomers,
+	handleCreateCustomer,
+	handleUpdateCustomer,
+	handleDeleteCustomer,
+};

@@ -1,11 +1,11 @@
 //create an appointment using the customers id
 const { Op } = require("sequelize");
 const Appointment = require("../model/Appointment");
-const appointmentSchema = require("../validationjoi/newAppointment");
+const appointmentSchema = require("../validationjoi/appointments/newAppointment");
 const { DateTime } = require("luxon");
 const Customer = require("../model/Customer");
 const HairStyle = require("../model/HairStyle");
-const updateAppointment = require("../validationjoi/updateAppointment");
+const updateAppointment = require("../validationjoi/appointments/updateAppointment");
 
 function validateTime(time, date) {
 	const currentTime = DateTime.now();
