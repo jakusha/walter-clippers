@@ -1,6 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
 const Appointment = require("./Appointment");
+const Roles = require("./Roles");
 
 const Customer = sequelize.define(
 	"Customer",
@@ -32,6 +33,8 @@ const Customer = sequelize.define(
 	}
 );
 
+Customer.belongsToMany(Roles, { through: "UserRoles" });
+Roles.belongsToMany(Customer, { through: "UserRoles" });
 Customer.hasMany(Appointment, {
 	foreignKey: "custId",
 });

@@ -1,7 +1,8 @@
 //create an appointment using the customers id
 const { Op } = require("sequelize");
 const Appointment = require("../model/Appointment");
-const appointmentSchema = require("../validationjoi/appointments/newAppointment");
+const newAppointmentSchema = require("../validationjoi/appointments/newAppointment");
+const availableTimeSchema = require("../validationjoi/appointments/getAvailableAppointments");
 const { DateTime } = require("luxon");
 const Customer = require("../model/Customer");
 const HairStyle = require("../model/HairStyle");
@@ -9,54 +10,62 @@ const updateAppointment = require("../validationjoi/appointments/updateAppointme
 
 function validateTime(time, date) {
 	const currentTime = DateTime.now();
-	console.log(currentTime);
 	const timeValid = time >= "08:00" && time <= "22:00" && date > currentTime;
-
 	return timeValid;
 }
+
 async function handleCreateAppointMent(req, res) {
-	const { value, error } = appointmentSchema.validate(req.body);
+	const custId = req.params.custId;
 
-	if (error) {
-		return res.json({ message: error.message }).status(400);
-	}
-
-	const timeValid = validateTime(value.time, value.date);
-	console.log(timeValid, "DDAAAATTTTEEEEEEEEE");
-
-	if (!timeValid)
-		return res.json({ message: "invalid appointment time" }).status(400);
-
-	//check if time and date is available
-	const foundAppointment = await Appointment.findOne({
-		where: {
-			[Op.and]: [
-				{ time: value.time },
-				{ date: value.date },
-				{ cancelled: false },
-			],
-		},
-	});
-
-	if (foundAppointment)
-		return res
-			.json({ message: "appointment date is not available" })
-			.status(400);
-	console.log(foundAppointment, "found a result ooooooo ~!!!!!!!!");
 	try {
-		await Appointment.create({
-			...value,
-		});
-	} catch (error) {
-		console.log(error, "an error occureddd--------!!!!!", error.message);
-		return res.json({ error: error.message }).status(500);
-	}
+		const validCustomer = await Customer.findByPk(custId);
+		if (validCustomer) {
+			const { value, error } = newAppointmentSchema.validate(req.body);
 
-	return res.json({ value, error });
+			if (error) {
+				return res.json({ message: error.message }).status(400);
+			}
+
+			const timeValid = validateTime(value.time, value.date);
+
+			if (!timeValid)
+				return res
+					.json({ message: "invalid appointment time" })
+					.status(400);
+
+			//check if time and date is available
+			const foundAppointment = await Appointment.findOne({
+				where: {
+					[Op.and]: [
+						{ time: value.time },
+						{ date: value.date },
+						{ cancelled: false },
+					],
+				},
+			});
+
+			if (foundAppointment)
+				return res
+					.status(400)
+					.json({ message: "appointment date is not available" });
+			const result = await Appointment.create({
+				...value,
+				custId,
+			});
+			return res.json({
+				result,
+				message: "successfully created anappointment",
+			});
+		} else {
+			return res.json({ message: "invalid customer id" }).status(400);
+		}
+	} catch (error) {
+		return res.status(500).json({ message: error.message });
+	}
 }
 
 //get all appointments belonging to a customer
-async function handleGetAllAppointMent(req, res) {
+async function handleGetAllCustomerAppointMent(req, res) {
 	const custId = req.params.custId;
 
 	//check if its a valid customer id
@@ -92,14 +101,17 @@ async function handleUpdateAppointment(req, res) {
 		return res.json({ message: error.message }).status(400);
 	}
 
-	const timeValid = validateTime(value.time, value.date);
-
-	if (!timeValid)
-		return res.json({ message: "invalid appointment time" }).status(400);
 	try {
 		//check valid appointment id
 		const result = await Appointment.findByPk(appointmentId);
+		console.log("FOOunndddddd APPOINTMENTTTSSSS !!!!!!!!!!!!1", result);
 		if (result) {
+			const timeValid = validateTime(value.time, value.date);
+
+			if (!timeValid)
+				return res
+					.json({ message: "invalid appointment time" })
+					.status(400);
 			console.log(value, "asdadadasd=======11111110000000000");
 			const validHairstyle = await HairStyle.findByPk(value.hairStyleId);
 			const validCustomerId = await Customer.findByPk(value.custId);
@@ -171,9 +183,68 @@ async function handleDeleteAppointment(req, res) {
 	}
 }
 
+async function handleGetAvailableTime(req, res) {
+	const { appointmentId, date } = req.params;
+	const { value, error } = availableTimeSchema.validate({ date });
+
+	if (error) {
+		return res.status(400).json({ message: error.message });
+	}
+	const times = {
+		"07:00:00": true,
+		"08:00:00": true,
+		"09:00:00": true,
+		"10:00:00": true,
+		"11:00:00": true,
+		"12:00:00": true,
+		"12:00:00": true,
+		"14:00:00": true,
+		"15:00:00": true,
+		"16:00:00": true,
+		"17:00:00": true,
+		"18:00:00": true,
+		"19:00:00": true,
+	};
+	const result = await Appointment.findAll({
+		attributes: ["time"],
+		where: {
+			date: date,
+			cancelled: false,
+			completed: false,
+		},
+	});
+
+	for (let i = 0; i < result.length; i++) {
+		times[result[i].time] = false;
+	}
+
+	res.json({ appointmentId, date, value, message: error?.message, times });
+}
+
+async function handleGetAppointmentInfo(req, res) {
+	const appointmentId = req.params.appointmentId;
+	try {
+		const result = await Appointment.findByPk(appointmentId);
+
+		console.log(result);
+		if (result) {
+			const result = await Appointment.findByPk(appointmentId);
+			return res.json({ result });
+		} else {
+			return res
+				.status(400)
+				.json({ message: `Appointment ID ${appointmentId} not found` });
+		}
+	} catch (error) {
+		return res.json({ error: error.message }).status(500);
+	}
+}
+
 module.exports = {
 	handleCreateAppointMent,
-	handleGetAllAppointMent,
+	handleGetAllCustomerAppointMent,
 	handleUpdateAppointment,
 	handleDeleteAppointment,
+	handleGetAvailableTime,
+	handleGetAppointmentInfo,
 };

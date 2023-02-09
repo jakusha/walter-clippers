@@ -3,6 +3,9 @@ const bcrypt = require("bcrypt");
 const createUserSchema = require("../validationjoi/customers/newcustomer");
 const updateCustomer = require("../validationjoi/customers/updateCustomer");
 const { Op } = require("sequelize");
+const UserRoles = require("../model/UserRoles");
+const Roles = require("../model/Roles");
+
 async function handleGetAllCustomers(req, res) {
 	const customers = await Customer.findAll();
 	res.json({ message: "success", customers });
@@ -14,19 +17,17 @@ async function handleCreateCustomer(req, res) {
 		return res.json({ message: error.message }).status(400);
 	}
 
-	console.log(req.body);
-
 	//check if customer with that usernamealready exist
 	const foundCustomer = await Customer.findOne({
 		where: {
-			username: [value.username],
+			[Op.or]: [{ email: value.email }, { username: value.username }],
 		},
 	});
 
-	console.log(foundCustomer);
-
 	if (foundCustomer)
-		return res.json({ message: "username is already in use" }).status(400);
+		return res
+			.json({ message: "username or email is already in use" })
+			.status(400);
 
 	//hashing the password and creating customer
 	try {
@@ -38,6 +39,11 @@ async function handleCreateCustomer(req, res) {
 		const newcustomer = await Customer.create({
 			...value,
 			password: hashedPwd,
+		});
+
+		await UserRoles.create({
+			custId: newcustomer.custId,
+			roleId: 4848,
 		});
 		console.log(newcustomer);
 
@@ -63,21 +69,19 @@ async function handleUpdateCustomer(req, res) {
 		//check valid appointment id
 		const result = await Customer.findByPk(custId);
 		if (result) {
-			console.log(value, "asdadadasd=======11111110000000000");
-
 			//check if username and email is available
-			const foundUserInfo = await Customer.findOne({
+			const foundCustomer = await Customer.findOne({
 				where: {
 					[Op.or]: [
-						{ username: value.username },
 						{ email: value.email },
+						{ username: value.username },
 					],
 				},
 			});
 
-			console.log(foundUserInfo);
+			console.log(foundCustomer);
 
-			if (foundUserInfo)
+			if (foundCustomer)
 				return res
 					.json({ message: "username or email is not available" })
 					.status(400);
