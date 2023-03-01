@@ -11,6 +11,29 @@ async function handleGetAllCustomers(req, res) {
 	res.json({ message: "success", customers });
 }
 
+async function handleGetCustomer(req, res) {
+	const cookies = req.cookies;
+
+	console.log(cookies, "COOKIIEESSSS!!!!!!");
+	if (!cookies?.jwt) return res.sendStatus(401);
+
+	const refreshToken = cookies.jwt;
+	console.log(refreshToken, "REFRESHH TOKKEENNNN");
+
+	try {
+		const customers = await Customer.findOne({
+			where: {
+				refreshToken: refreshToken,
+			},
+		});
+		if (customers === null) {
+			return res.sendStatus(403);
+		}
+		return res.json({ customers });
+	} catch (error) {
+		return res.status(500).json({ message: error.message });
+	}
+}
 async function handleCreateCustomer(req, res) {
 	const { value, error } = createUserSchema.validate(req.body);
 	if (error) {
@@ -135,4 +158,5 @@ module.exports = {
 	handleCreateCustomer,
 	handleUpdateCustomer,
 	handleDeleteCustomer,
+	handleGetCustomer,
 };

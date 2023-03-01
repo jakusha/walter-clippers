@@ -8,16 +8,20 @@ const customerRouter = require("./router/customer");
 const appointmentRouter = require("./router/appointment");
 const hairStyleRouter = require("./router/hairstyle");
 const authRouter = require("./router/authentication");
+const calenderRouter = require("./router/calender");
 const Roles = require("./model/Roles");
+const corsOptions = require("./config/corsOption");
 
-app.use(cors());
-// logger middleware
-app.use(morgan("dev"));
-
+//plarse cookies
 app.use(cookieParser());
 
 //built in expressjs json parser middleware
 app.use(express.json());
+
+app.use(cors(corsOptions));
+
+// logger middleware
+app.use(morgan("dev"));
 
 //buitin middleware to handle urlencoded form data
 app.use(express.urlencoded({ extended: false }));
@@ -30,8 +34,9 @@ app.use("/customer", customerRouter);
 app.use("/appointment", appointmentRouter);
 app.use("/hairstyle", hairStyleRouter);
 app.use("/auth", authRouter);
+app.use("/calender", calenderRouter);
 
-const PORT = 3000;
+const PORT = 3333;
 
 //connect to database and start server
 const startDb = async () => {

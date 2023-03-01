@@ -9,8 +9,19 @@ const HairStyle = require("../model/HairStyle");
 const updateAppointment = require("../validationjoi/appointments/updateAppointment");
 
 function validateTime(time, date) {
-	const currentTime = DateTime.now();
-	const timeValid = time >= "08:00" && time <= "22:00" && date > currentTime;
+	const currentDate = new Date().toISOString().substring(0, 10);
+	date = new Date(date).toISOString().substring(0, 10);
+	// console.log(time, date, currentDate, parseInt(time) > DateTime.now().hour);
+	let timeValid;
+	if (date <= currentDate) {
+		timeValid =
+			time >= "08:00" &&
+			time <= "22:00" &&
+			date >= currentDate &&
+			parseInt(time) > DateTime.now().hour;
+	} else {
+		timeValid = time >= "08:00" && time <= "22:00" && date >= currentDate;
+	}
 	return timeValid;
 }
 
@@ -23,15 +34,29 @@ async function handleCreateAppointMent(req, res) {
 			const { value, error } = newAppointmentSchema.validate(req.body);
 
 			if (error) {
-				return res.json({ message: error.message }).status(400);
+				return res.status(400).json({ message: error.message });
 			}
-
+			console.log(value);
 			const timeValid = validateTime(value.time, value.date);
 
 			if (!timeValid)
 				return res
-					.json({ message: "invalid appointment time" })
-					.status(400);
+					.status(400)
+					.json({ message: "invalid appointment time" });
+
+			//check if user already has appointment on that date (1 user 1 appointment per day)
+			const appointment = await Appointment.findOne({
+				where: {
+					[Op.and]: [{ custId: custId }, { date: value.date }],
+				},
+			});
+
+			if (appointment) {
+				return res.status(400).json({
+					message:
+						"appointment date is not available, you cant create more than one appointment per day",
+				});
+			}
 
 			//check if time and date is available
 			const foundAppointment = await Appointment.findOne({
@@ -55,9 +80,10 @@ async function handleCreateAppointMent(req, res) {
 			return res.json({
 				result,
 				message: "successfully created anappointment",
+				foundAppointment: appointment,
 			});
 		} else {
-			return res.json({ message: "invalid customer id" }).status(400);
+			return res.status(400).json({ message: "invalid customer id" });
 		}
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
@@ -183,8 +209,21 @@ async function handleDeleteAppointment(req, res) {
 	}
 }
 
+function validAvalilableTime(time, date) {
+	//all times less than current date and time are invalid
+
+	date = new Date(date).toISOString().substring(0, 10);
+	const currentDate = new Date().toISOString().substring(0, 10);
+	const timeNotValid =
+		DateTime.now().hour >= parseInt(time) && currentDate >= date;
+
+	return timeNotValid;
+}
+
+// Single page application, is a site that has a single page with dynamic contents based on the URL (and other things).
 async function handleGetAvailableTime(req, res) {
-	const { appointmentId, date } = req.params;
+	//remember to increase month by 1 for valid date
+	const { date } = req.params;
 	const { value, error } = availableTimeSchema.validate({ date });
 
 	if (error) {
@@ -197,7 +236,7 @@ async function handleGetAvailableTime(req, res) {
 		"10:00:00": true,
 		"11:00:00": true,
 		"12:00:00": true,
-		"12:00:00": true,
+		"13:00:00": true,
 		"14:00:00": true,
 		"15:00:00": true,
 		"16:00:00": true,
@@ -218,7 +257,20 @@ async function handleGetAvailableTime(req, res) {
 		times[result[i].time] = false;
 	}
 
-	res.json({ appointmentId, date, value, message: error?.message, times });
+	const times2 = { ...times };
+
+	for (let time in times2) {
+		if (validAvalilableTime(time.slice(0, 5), date)) {
+			//checks if its not valid
+			times2[time] = false;
+		} else {
+			if (times2[time] !== false) {
+				times2[time] = true;
+			}
+		}
+	}
+
+	res.json({ date, value, message: error?.message, times: times2 });
 }
 
 async function handleGetAppointmentInfo(req, res) {

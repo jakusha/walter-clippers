@@ -1,4 +1,5 @@
 const express = require("express");
+const { verifyJwt } = require("../middlewares/verifyJwt");
 const {
 	handleGetAllCustomerAppointMent,
 	handleCreateAppointMent,
@@ -14,6 +15,6 @@ api.get("/info/:appointmentId", handleGetAppointmentInfo);
 api.put("/update/:appointmentId", handleUpdateAppointment);
 api.post("/create/:custId", handleCreateAppointMent);
 api.delete("/delete/:appointmentId", handleDeleteAppointment);
-api.get("/availtime/:appointmentId/:date", handleGetAvailableTime);
+api.get("/availtime/:date", handleGetAvailableTime);
 
 module.exports = api;

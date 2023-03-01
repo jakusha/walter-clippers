@@ -9,7 +9,7 @@ require("dotenv").config();
 async function handleLogin(req, res) {
 	const { value, error } = loginUserSchema.validate(req.body);
 	if (error) {
-		return res.json({ message: error.message }).status(400);
+		return res.status(400).json({ message: error.message });
 	}
 
 	const foundCustomer = await Customer.findOne({
@@ -56,13 +56,19 @@ async function handleLogin(req, res) {
 
 		res.cookie("jwt", refreshToken, {
 			httpOnly: true,
+			secure: true,
 			sameSite: "None",
 			maxAge: 300000,
-			sevure: true,
 		});
-		return res.json({ message: "logged in succesfully", accessToken });
+		const { username, email, custId } = foundCustomer;
+		const customer = { username, email, custId };
+		res.json({
+			message: "logged in succesfully",
+			accessToken,
+			customer,
+		});
 	} else {
-		return res.status(401).json({ message: "incorrect password" });
+		res.status(401).json({ message: "incorrect password" });
 	}
 }
 
@@ -86,35 +92,37 @@ async function handleLogout(req, res) {
 		customer.save();
 	}
 
-	res.clearCookie("jwt", { httpOnly: true, sameSite: "None" }); //in production add the option secure:true
+	res.clearCookie("jwt", { httpOnly: true, sameSite: "none" }); //in production add the option secure:true
 	return res.json(customer).status(204);
 }
 
 async function handleRefreshToken(req, res) {
+	console.log(req, "REQUeKSDF!!!!!!!!!");
 	const cookies = req.cookies;
 
+	console.log(cookies, "COOKIIEESSSS!!!!!!");
 	if (!cookies?.jwt) return res.sendStatus(401);
 
 	const refreshToken = cookies.jwt;
 
 	//check if the refresh token exist in our database
-	const customer = await Customer.findOne({
+	const foundCustomer = await Customer.findOne({
 		where: {
 			refreshToken: refreshToken,
 		},
 	});
 
-	if (!customer) return res.sendStatus(403);
+	if (!foundCustomer) return res.sendStatus(403);
 
 	jwt.verify(
 		refreshToken,
 		process.env.REFRESH_TOKEN_SECRET,
 		async (err, decoded) => {
-			if (err || customer.username !== decoded.username)
+			if (err || foundCustomer.username !== decoded.username)
 				return res.sendStatus(403);
 			const userRoles = await UserRoles.findAll({
 				where: {
-					custId: customer.custId,
+					custId: foundCustomer.custId,
 				},
 			});
 
@@ -122,14 +130,15 @@ async function handleRefreshToken(req, res) {
 
 			const accessToken = jwt.sign(
 				{
-					username: customer.username,
+					username: foundCustomer.username,
 					roles: rolesResult,
 				},
 				process.env.ACCESS_TOKEN_SECRET,
 				{ expiresIn: "5m" }
 			);
-
-			res.json({ accessToken });
+			const { username, email, custId } = foundCustomer;
+			const customer = { username, email, custId };
+			res.json({ accessToken, customer });
 		}
 	);
 }
