@@ -34,7 +34,7 @@ async function handleCreateAppointMent(req, res) {
 			const { value, error } = newAppointmentSchema.validate(req.body);
 
 			if (error) {
-				return res.status(400).json({ message: error.message });
+				return res.status(400).json({ error: error.message });
 			}
 			console.log(value);
 			const timeValid = validateTime(value.time, value.date);
@@ -42,7 +42,7 @@ async function handleCreateAppointMent(req, res) {
 			if (!timeValid)
 				return res
 					.status(400)
-					.json({ message: "invalid appointment time" });
+					.json({ error: "invalid appointment time" });
 
 			//check if user already has appointment on that date (1 user 1 appointment per day)
 			const appointment = await Appointment.findOne({
@@ -83,10 +83,10 @@ async function handleCreateAppointMent(req, res) {
 				foundAppointment: appointment,
 			});
 		} else {
-			return res.status(400).json({ message: "invalid customer id" });
+			return res.status(400).json({ error: "invalid customer id" });
 		}
 	} catch (error) {
-		return res.status(500).json({ message: error.message });
+		return res.status(500).json({ error: error.message });
 	}
 }
 
@@ -106,7 +106,7 @@ async function handleGetAllCustomerAppointMent(req, res) {
 
 			return res.json({ custId, result });
 		} else {
-			return res.json({ message: "invalid customer id" }).status(400);
+			return res.json({ error: "invalid customer id" }).status(400);
 		}
 	} catch (error) {
 		return res.json({ error: error.message }).status(500);
@@ -124,25 +124,47 @@ async function handleUpdateAppointment(req, res) {
 	const { value, error } = updateAppointment.validate(req.body);
 
 	if (error) {
-		return res.json({ message: error.message }).status(400);
+		return res.json({ error: error.message }).status(400);
 	}
 
 	try {
 		//check valid appointment id
 		const result = await Appointment.findByPk(appointmentId);
+		console.log(value.custId, "CUSTOMER ID");
 		console.log("FOOunndddddd APPOINTMENTTTSSSS !!!!!!!!!!!!1", result);
 		if (result) {
 			const timeValid = validateTime(value.time, value.date);
 
 			if (!timeValid)
 				return res
-					.json({ message: "invalid appointment time" })
+					.json({ error: "invalid appointment time" })
 					.status(400);
 			console.log(value, "asdadadasd=======11111110000000000");
 			const validHairstyle = await HairStyle.findByPk(value.hairStyleId);
 			const validCustomerId = await Customer.findByPk(value.custId);
+			console.log(
+				!!validHairstyle,
+				!!validCustomerId,
+				"DATEAA!!!!!!!!!!!~~~~~~~~~~~"
+			);
 			if (validHairstyle && validCustomerId) {
 				// return res.json({ message: "good data" });
+
+				// const appointment = await Appointment.findOne({
+				// 	where: {
+				// 		[Op.and]: [
+				// 			{ custId: value.custId },
+				// 			{ date: value.date },
+				// 		],
+				// 	},
+				// });
+
+				// if (appointment) {
+				// 	return res.status(400).json({
+				// 		message:
+				// 			"appointment date is not available, you cant create more than one appointment per day",
+				// 	});
+				// }
 
 				//check if time and date is available
 				const foundAppointment = await Appointment.findOne({
@@ -157,7 +179,7 @@ async function handleUpdateAppointment(req, res) {
 
 				if (foundAppointment)
 					return res
-						.json({ message: "appointment date is not available" })
+						.json({ error: "appointment date is not available" })
 						.status(400);
 
 				await Appointment.update(
@@ -170,16 +192,17 @@ async function handleUpdateAppointment(req, res) {
 						},
 					}
 				);
+				return res.status(202).json({ message: "appointment updated" });
 			} else {
 				return res
-					.json({ message: "invalid hairstyle or customer id" })
-					.status(400);
+					.status(400)
+					.json({ error: "invalid hairstyle or customer id" });
 			}
 		} else {
-			return res.json({ message: "invalid appointment id" }).status(400);
+			return res.status(400).json({ error: "invalid appointment id" });
 		}
 	} catch (error) {
-		return res.json({ error: error.message }).status(500);
+		return res.status(500).json({ error: error.message });
 	}
 
 	return res.json({ value, error });
@@ -202,7 +225,29 @@ async function handleDeleteAppointment(req, res) {
 		} else {
 			return res
 				.status(400)
-				.json({ message: `Appointment ID ${appointmentId} not found` });
+				.json({ error: `Appointment ID ${appointmentId} not found` });
+		}
+	} catch (error) {
+		return res.json({ error: error.message }).status(500);
+	}
+}
+
+async function handleGetRecentAppointment(req, res) {
+	const custId = req.params.custId;
+
+	//check if its a valid customer id
+	try {
+		const validCustomer = await Customer.findByPk(custId);
+		if (validCustomer) {
+			const result = await Appointment.findAll({
+				where: {
+					custId,
+				},
+			});
+
+			return res.json({ custId, result });
+		} else {
+			return res.json({ error: "invalid customer id" }).status(400);
 		}
 	} catch (error) {
 		return res.json({ error: error.message }).status(500);
@@ -227,7 +272,7 @@ async function handleGetAvailableTime(req, res) {
 	const { value, error } = availableTimeSchema.validate({ date });
 
 	if (error) {
-		return res.status(400).json({ message: error.message });
+		return res.status(400).json({ error: error.message });
 	}
 	const times = {
 		"07:00:00": true,
@@ -285,7 +330,7 @@ async function handleGetAppointmentInfo(req, res) {
 		} else {
 			return res
 				.status(400)
-				.json({ message: `Appointment ID ${appointmentId} not found` });
+				.json({ error: `Appointment ID ${appointmentId} not found` });
 		}
 	} catch (error) {
 		return res.json({ error: error.message }).status(500);

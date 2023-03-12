@@ -49,10 +49,16 @@ async function handleGetCustomerCalender(req, res) {
 			for (let i = 0; i < result.length; i++) {
 				const appointment = result[i];
 				const date = new Date(appointment.date).getDate();
+
+				//orange out appointment date that you booked appointments for, that have passed.
+				let passedCurrentDate =
+					new Date().toISOString().substring(0, 10) >
+					appointment.date;
 				dateToAppointment[date] = {
 					day: date,
 					appointment: true,
 					appointmentInfo: appointment,
+					passedCurrentDate,
 				};
 			}
 			const calender = generateFullCalender(
@@ -62,7 +68,7 @@ async function handleGetCustomerCalender(req, res) {
 			);
 			return res.json({ value, calender, result, dateToAppointment });
 		} else {
-			return res.json({ message: "invalid customer id" }).status(400);
+			return res.status(400).json({ message: "invalid customer id" });
 		}
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
@@ -72,6 +78,7 @@ async function handleGetCustomerCalender(req, res) {
 async function handleGenerateCalenderModal(req, res) {
 	const month = +req.params.month;
 	const year = +req.params.year;
+	const custId = req.params.custId;
 
 	const { value, error } = calenderSchema.validate({ month, year });
 	if (error) {
@@ -79,47 +86,55 @@ async function handleGenerateCalenderModal(req, res) {
 	}
 
 	try {
-		let condition;
-		if (month <= 10) {
-			condition = {
-				[Op.lte]: `${year}-${month + 2}`,
-				[Op.gte]: `${year}-${month + 1}`,
-			};
-		} else {
-			condition = {
-				[Op.gte]: `${year}-${month + 1}`,
-				[Op.lte]: `${year}-${month + 1}-${31}`,
-			};
-		}
+		const validCustomer = await Customer.findByPk(custId);
+		if (validCustomer) {
+			let condition;
+			if (month <= 10) {
+				condition = {
+					[Op.lte]: `${year}-${month + 2}`,
+					[Op.gte]: `${year}-${month + 1}`,
+				};
+			} else {
+				condition = {
+					[Op.gte]: `${year}-${month + 1}`,
+					[Op.lte]: `${year}-${month + 1}-${31}`,
+				};
+			}
 
-		const result = await Appointment.findAll({
-			where: {
-				date: {
-					[Op.and]: {
-						...condition,
+			const result = await Appointment.findAll({
+				where: {
+					date: {
+						[Op.and]: {
+							...condition,
+						},
 					},
+					custId: custId,
 				},
-			},
-		});
+			});
+			console.log(result, "RESULT FROM APPOINTMENT!!!!!!11");
 
-		const dateToAppointment = {};
+			const dateToAppointment = {};
 
-		for (let i = 0; i < result.length; i++) {
-			const appointment = result[i];
-			const date = new Date(appointment.date).getDate();
-			dateToAppointment[date] = {
-				day: date,
-				appointment: true,
-				appointmentInfo: appointment,
-			};
+			for (let i = 0; i < result.length; i++) {
+				const appointment = result[i];
+				const date = new Date(appointment.date).getDate();
+
+				dateToAppointment[date] = {
+					day: date,
+					appointment: true,
+					appointmentInfo: appointment,
+				};
+			}
+			const calender = generateCalenderModal(
+				month,
+				year,
+				new Date().getDate(),
+				dateToAppointment
+			);
+			return res.json({ value, calender, result, dateToAppointment });
+		} else {
+			return res.status(400).json({ message: "invalid customer id" });
 		}
-		const calender = generateCalenderModal(
-			month,
-			year,
-			new Date().getDate(),
-			dateToAppointment
-		);
-		return res.json({ value, calender, result, dateToAppointment });
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
 	}

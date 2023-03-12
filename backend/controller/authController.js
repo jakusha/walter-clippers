@@ -47,7 +47,7 @@ async function handleLogin(req, res) {
 				username: foundCustomer.username,
 			},
 			process.env.REFRESH_TOKEN_SECRET,
-			{ expiresIn: "1d" }
+			{ expiresIn: "60m" }
 		);
 
 		//save refresh token in dateabse

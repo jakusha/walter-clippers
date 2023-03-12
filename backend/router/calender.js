@@ -7,7 +7,7 @@ const { verifyJwt } = require("../middlewares/verifyJwt");
 
 const api = express.Router();
 
-api.get("/:month/:year/modal", handleGenerateCalenderModal);
+api.get("/:custId/:month/:year/modal", handleGenerateCalenderModal);
 api.get("/:custId/:month/:year", handleGetCustomerCalender);
 
 module.exports = api;
