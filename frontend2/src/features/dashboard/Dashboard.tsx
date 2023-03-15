@@ -1,17 +1,13 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router";
 import AppointmentInfo from "../../components/AppointmentInfo";
 import Calender from "../../components/Calender";
 import {
-	useGenerateCalenderMutation,
-	useGetAllHairStylesMutation,
+	useLazyGenerateCalenderQuery,
+	useGetAllHairStylesQuery,
 } from "../appointments/appointmentApiSlice";
 
-import {
-	selectHairStyle,
-	setHairStyles,
-} from "../appointments/appointmentSlice";
 import { useLogoutMutation } from "../auth/authApiSlice";
 import { selectAuthCustomer } from "../auth/authSlice";
 import { logOut } from "../auth/authSlice";
@@ -31,27 +27,18 @@ interface Appointment {
 }
 
 
-interface  currentAppointmentDate {
+interface CurrentAppointmentDate {
+	day?: string;
+	appointment?:boolean;		
 	appointmentInfo: {
 		date: string;
 		time: string;
 		appointmentId: string;
 		hairStyleId: string;
-		completed: boolean
-	}
+	}[];
+	passedCurrentDate?: boolean;
 }
 
-// {
-// 	"date": "2023-03-02",
-// 	"time": "09:00:00",
-// 	"completed": false,
-// 	"cancelled": false,
-// 	"appointmentId": "d61abff7-81a1-4e4a-bf37-13bb5504c8da",
-// 	"custId": "219ff894-295c-4316-afc9-56933b3562a4",
-// 	"hairStyleId": "b54ec33e-6ddf-4648-a464-f60ca64a2f88",
-// 	"createdAt": "2023-02-28T20:52:02.244Z",
-// 	"updatedAt": "2023-02-28T20:52:02.244Z"
-// }
 
 export interface  HairStyle {
 	name: string;
@@ -68,44 +55,24 @@ const Dashboard = () => {
 	const [logout] = useLogoutMutation();
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
-	const hairStyle:HairStyle[] = useAppSelector<HairStyle[]>(selectHairStyle);
-	const [getAllHairStyles] = useGetAllHairStylesMutation();
-
+	
+	const {data: hairStyleData} = useGetAllHairStylesQuery();
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const [appointmentInfoModal, setAppointmentInfoModal] = useState(false);
-	const [currentAppointmentDate, setCurrentAppointmentDate] = useState({} as currentAppointmentDate);
+	const [currentAppointmentDate, setCurrentAppointmentDate] = useState({} as CurrentAppointmentDate);
 	console.log(currentAppointmentDate, "");
 
+	
 	const [
 		generateCalender,
 		{
 			data: calenderData,
 			isLoading: calenderIsLoading,
-			error: calenderError,
+			isError: calenderError,
 		},
-	] = useGenerateCalenderMutation();
+	] = useLazyGenerateCalenderQuery();
 
 	console.log(calenderData, "CALENDER DATA!!!!!!1");
-	useEffect(() => {
-		async function fetchHairStyle() {
-			if (hairStyle.length === 0) {
-				try {
-					//passing this placeholder string to make linter shutup
-					const result:HairStyle[] = await getAllHairStyles("asd").unwrap();
-					console.log(
-						result,
-						"RESULT FROM FETCHING HAIRSTYLE!!!!!!!!!!!!!"
-					);
-					dispatch(setHairStyles({ ...result }));
-				} catch (error) {
-					console.log("aN ERROR OCCURED IN FETCHIG Hairstyle");
-				}
-			}
-			console.log(hairStyle, "HaISRTYLEE HAIRSTYLLEEEE!!!!!!!!!!1");
-		}
-
-		fetchHairStyle();
-	}, [dispatch, getAllHairStyles, hairStyle]);
 
 	async function handleLogout() {
 		try {
@@ -140,7 +107,7 @@ const Dashboard = () => {
 					.map((appointment:Appointment) => (
 						<AppointmentItem
 							appointment={appointment}
-							hairStyle={hairStyle}
+							hairStyle={hairStyleData?.hairStyles}
 
 							setCurrentAppointmentDate={
 								setCurrentAppointmentDate
@@ -176,7 +143,7 @@ const Dashboard = () => {
 						setAppointmentInfoModal={setAppointmentInfoModal}
 						generateCalender={generateCalender}
 						data={calenderData}
-						isLoading={calenderIsLoading} providedCalenderContent={undefined}					/>
+						isLoading={calenderIsLoading} 					/>
 				</div>
 				<div className="border-2 border-green-300 flex-1">
 					<div>
@@ -222,7 +189,7 @@ const Dashboard = () => {
 										currentAppointmentDate={
 											currentAppointmentDate
 										}
-										hairStyle={hairStyle}
+										hairStyle={hairStyleData?.hairStyles}
 										setAppointmentInfoModal={
 											setAppointmentInfoModal
 										}

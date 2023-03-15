@@ -31,18 +31,33 @@ async function handleGetCustomerCalender(req, res) {
 				};
 			}
 
-			const result = await Appointment.findAll({
-				where: {
-					custId: {
-						[Op.eq]: custId,
-					},
-					date: {
-						[Op.and]: {
-							...condition,
+			let result;
+
+			if (req.user === "admin") {
+				result = await Appointment.findAll({
+					include: "Customer",
+					where: {
+						date: {
+							[Op.and]: {
+								...condition,
+							},
 						},
 					},
-				},
-			});
+				});
+			} else {
+				result = await Appointment.findAll({
+					where: {
+						custId: {
+							[Op.eq]: custId,
+						},
+						date: {
+							[Op.and]: {
+								...condition,
+							},
+						},
+					},
+				});
+			}
 
 			const dateToAppointment = {};
 
@@ -54,12 +69,21 @@ async function handleGetCustomerCalender(req, res) {
 				let passedCurrentDate =
 					new Date().toISOString().substring(0, 10) >
 					appointment.date;
-				dateToAppointment[date] = {
-					day: date,
-					appointment: true,
-					appointmentInfo: appointment,
-					passedCurrentDate,
-				};
+				if (dateToAppointment[date] !== undefined) {
+					dateToAppointment[date].appointmentInfo.push({
+						day: date,
+						appointment: true,
+						appointmentInfo: appointment,
+						passedCurrentDate,
+					});
+				} else {
+					dateToAppointment[date] = {
+						day: date,
+						appointment: true,
+						appointmentInfo: [appointment],
+						passedCurrentDate,
+					};
+				}
 			}
 			const calender = generateFullCalender(
 				month,
@@ -188,7 +212,7 @@ function generateFullCalender(month, year, previosAppointments) {
 			calender.push({
 				day: i,
 				appointment: false, //show green on calender if true else leave plain
-				appointmentInfo: {},
+				appointmentInfo: [],
 			});
 		}
 	}
@@ -200,6 +224,7 @@ function generateFullCalender(month, year, previosAppointments) {
 	return calender;
 }
 
+//calender modal input
 function generateCalenderModal(month, year, currentDay, previosAppointments) {
 	const calender = [];
 	const days = daysInMonth(month, year);

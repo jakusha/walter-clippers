@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import ShowMore from "../../components/ShowMore";
 import {
 	HairStyle,
-	useGetAllHairStylesMutation,
+	useGetAllHairStylesQuery,
 	useGetCustomerAppointmentsQuery,
 } from "../appointments/appointmentApiSlice";
 import { selectAuthCustomer } from "../auth/authSlice";
@@ -27,29 +27,22 @@ const History = () => {
 	);
 	const [currentAppointmentDate, setCurrentAppointmentDate] = useState<currentAppointmentDate>({} as currentAppointmentDate );
 	const [appointmentInfoModal, setAppointmentInfoModal] = useState(false);
-	const [getAllHairStyles] = useGetAllHairStylesMutation();
-	const [hairStyles, setHairStyles] = useState<HairStyle[]>([]);
+	const {data:hairStyleData, isSuccess: hairStyleDataSucces} = useGetAllHairStylesQuery();
 
+	let price;
+	let style;
+	if(hairStyleDataSucces) {
+		 price = hairStyleData?.hairStyles?.find(
+			(style:HairStyle) => style?.hairStyleId === currentAppointmentDate?.hairStyleId
+		)?.price;
+		style = hairStyleData?.hairStyles?.find(
+			(style:HairStyle) => style.hairStyleId === currentAppointmentDate?.hairStyleId
+		)?.name;
+	}
 	
-	const price = hairStyles?.find(
-		(style:HairStyle) => style?.hairStyleId === currentAppointmentDate?.hairStyleId
-	)?.price;
-	const style = hairStyles?.find(
-		(style:HairStyle) => style.hairStyleId === currentAppointmentDate?.hairStyleId
-	)?.name;
 
 
-	useEffect(() => {
-		async function fetchHairStyle() {
-			try {
-				const result = await getAllHairStyles('asd').unwrap();
-				setHairStyles(result.hairStyles);
-			} catch (error) {
-				console.log("aN ERROR OCCURED IN FETCHIG Hairstyle");
-			}
-		}
-		fetchHairStyle();
-	}, [getAllHairStyles]);
+
 
 	let content;
 	if (isLoading) {
@@ -59,7 +52,7 @@ const History = () => {
 			<div key={uuidv4()}>
 				{item.date}
 				{
-					hairStyles?.find(
+					hairStyleData?.hairStyles?.find(
 						(style:HairStyle) => style?.hairStyleId === item?.hairStyleId
 					)?.name
 				}

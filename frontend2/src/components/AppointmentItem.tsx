@@ -8,22 +8,29 @@ interface Appointment {
 	completed?: boolean
 }
 
-interface  currentAppointmentDate {
+interface CurrentAppointmentDate {
+	day?: string;
+	appointment?:boolean;		
 	appointmentInfo: {
 		date: string;
 		time: string;
 		appointmentId: string;
 		hairStyleId: string;
-		completed: boolean
-	}
+	}[];
+	passedCurrentDate?: boolean;
 }
+
 
 interface AppointmentItemProp {
 	appointment: Appointment;
 	hairStyle: HairStyle[];
-	setCurrentAppointmentDate: (value: currentAppointmentDate) => void;
+	setCurrentAppointmentDate: (value: CurrentAppointmentDate) => void;
 	setAppointmentInfoModal: (modal: boolean) => void;
 }
+
+
+
+
 const AppointmentItem = ({
 	appointment,
 	hairStyle,
@@ -39,8 +46,8 @@ const AppointmentItem = ({
 			<span
 				onClick={() => {
 					console.log(appointment);
-					let data = { appointmentInfo: appointment } as currentAppointmentDate
-					setCurrentAppointmentDate(data);
+					let data:any = appointment 
+					setCurrentAppointmentDate({appointmentInfo: [{...data}]});
 					setAppointmentInfoModal(true);
 				}}
 			>

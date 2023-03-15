@@ -29,9 +29,10 @@ async function handleLogin(req, res) {
 			},
 		});
 
+		//sign jwt tokn
 		const rolesResult = userRoles.map((customer) => customer.roleId);
 
-		//sign jwt tokn
+		console.log(rolesResult, "USERS ROLES");
 		const accessToken = jwt.sign(
 			{
 				username: foundCustomer.username,

@@ -18,6 +18,7 @@ interface CurrentAppointmentDate {
 		time: string;
 		appointmentId: string;
 		hairStyleId: string;
+        Customer?:any;
 	}[];
 	passedCurrentDate?: boolean;
 }
@@ -28,12 +29,12 @@ interface AppointmentInfoProps {
     hairStyle: HairStyle[];
     currentAppointmentDate: CurrentAppointmentDate;
 }
-const AppointmentInfo = ({
+const AdminAppointmentInfo = ({
 	setAppointmentInfoModal,
 	hairStyle,
 	currentAppointmentDate,
 }:AppointmentInfoProps) => {
-	console.log(currentAppointmentDate, "Current Appointment!!!!!")
+	console.log(currentAppointmentDate, hairStyle, "Current Appointment!!!!!")
 	const price = hairStyle?.find(
 		(style:HairStyle) =>
 			style?.hairStyleId ===
@@ -142,6 +143,11 @@ const AppointmentInfo = ({
 					</button>
 				</div>
 				<div>
+                <div>
+						customer:
+						{currentAppointmentDate?.appointmentInfo[0]
+								?.Customer?.username}
+					</div>
 					<div>
 						style:
 						{style}
@@ -161,6 +167,7 @@ const AppointmentInfo = ({
 				</div>
 				<div className="flex justify-between">
 					<span onClick={() => setReschedule(true)}>reschedule</span>
+                    
 					<span onClick={() => setDeleteModal(true)}>
 						cancel appointment
 					</span>
@@ -175,4 +182,4 @@ const AppointmentInfo = ({
 	);
 };
 
-export default AppointmentInfo;
+export default AdminAppointmentInfo;

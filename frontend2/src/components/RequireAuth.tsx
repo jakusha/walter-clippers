@@ -1,19 +1,49 @@
-import React, { ReactElement, ReactNode, useEffect } from "react";
+import {  ReactNode, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Navigate, redirect, useNavigate } from "react-router";
+import { Navigate, redirect } from "react-router";
 import { selectAuthToken } from "../features/auth/authSlice";
 
-const RequireAuth = ({ children }: {children: ReactNode}) => {
+import jwt_decode, {JwtPayload} from "jwt-decode";
+
+
+interface Auth{
+	exp: number;
+	iat: number;
+	roles:number[];
+	username: string;
+}
+
+const RequireAuth = ({ children, allowedRoles }: {children: ReactNode, allowedRoles?: number[]}) => {
 	const token = useSelector(selectAuthToken);
+	let decodedToken:Auth | null;
+	let content = children;
+
+	if(token) {
+		decodedToken = jwt_decode<JwtPayload>(token) as Auth
+			
+			if(token && decodedToken.roles && allowedRoles){
+			const isAllowed = decodedToken.roles.find(role => allowedRoles?.includes(role));
+			console.log(isAllowed,isAllowed === undefined, decodedToken.roles, "Allowed")
+			if (isAllowed === undefined ) {
+				console.log();
+				
+				content = <Navigate to="/dashboard"  replace />
+				
+			}
+		}
+		  
 	
+	}
+
 	useEffect(()=> {
 		if(!token) {
 			redirect("/login")
 		}
 	}, [token])
-	console.log(token, "HAHAHAHA TOOKKEKEKEMNNNN");
+	
 
-	return <>{children} </>
+	
+	return <>{content} </>
 };
 
 export default RequireAuth;

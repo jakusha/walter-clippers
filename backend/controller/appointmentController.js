@@ -93,16 +93,21 @@ async function handleCreateAppointMent(req, res) {
 //get all appointments belonging to a customer
 async function handleGetAllCustomerAppointMent(req, res) {
 	const custId = req.params.custId;
-
+	console.log(req.user === "admin", "USER ROLEEEE APPOINTMENT");
 	//check if its a valid customer id
 	try {
 		const validCustomer = await Customer.findByPk(custId);
 		if (validCustomer) {
-			const result = await Appointment.findAll({
-				where: {
-					custId,
-				},
-			});
+			let result;
+			if (req.user === "admin") {
+				result = await Appointment.findAll();
+			} else {
+				result = await Appointment.findAll({
+					where: {
+						custId,
+					},
+				});
+			}
 
 			return res.json({ custId, result });
 		} else {

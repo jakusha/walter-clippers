@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { getCurrentMonth, getCurrentYear, months } from "../utils/utils";
 import { v4 as uuidv4 } from "uuid";
 import { useGenerateCalenderModalMutation } from "../features/appointments/appointmentApiSlice";
@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 const currentYear = getCurrentYear();
 const currentMonth = getCurrentMonth();
 
-const CalenderInput = ({ setCurrentDate }) => {
+const CalenderInput = ({ setCurrentDate }: {setCurrentDate: (date:string)=> void}) => {
 	const customer = useSelector(selectAuthCustomer);
 	const [yearInput, setYearInput] = useState(() => currentYear);
 	const [monthInput, setMonthInput] = useState(() => currentMonth);
@@ -15,14 +15,17 @@ const CalenderInput = ({ setCurrentDate }) => {
 		useGenerateCalenderModalMutation();
 	console.log(data, "CALENDER MAPPPP!!!!!!!!!11");
 	useEffect(() => {
-		generateCalender({
-			month: monthInput,
-			year: yearInput,
-			custId: customer.custId,
-		});
-	}, [yearInput, monthInput, generateCalender, customer.custId]);
+		if(customer) {
 
-	let calenderContent = data?.calender?.map((value) => (
+			generateCalender({
+				month: monthInput,
+				year: yearInput,
+				custId: customer.custId,
+			});
+		}
+	}, [yearInput, monthInput, generateCalender, customer?.custId]);
+
+	let calenderContent = data?.calender?.map((value:any) => (
 		<div
 			className={`border-2 border-red-100 p-4 grid place-content-center ${
 				value.invalid
@@ -51,7 +54,7 @@ const CalenderInput = ({ setCurrentDate }) => {
 		</div>
 	));
 
-	function next(number) {
+	function next(number:number) {
 		if (number < 11) {
 			setMonthInput((value) => value + 1);
 		} else {
@@ -60,7 +63,7 @@ const CalenderInput = ({ setCurrentDate }) => {
 		}
 	}
 
-	function previous(number) {
+	function previous(number:number) {
 		if (number > 0) {
 			setMonthInput((value) => value - 1);
 		} else {
@@ -103,16 +106,16 @@ const CalenderInput = ({ setCurrentDate }) => {
 		return calanderDropDown;
 	}
 
-	function handleYearChange(e) {
-		if (e.target.value < currentYear || e.target.value > 2100) {
+	function handleYearChange(e:ChangeEvent<HTMLInputElement>) {
+		if (Number(e.target.value) < currentYear || Number(e.target.value) > 2100) {
 			setYearInput(currentYear);
 		} else {
-			setYearInput(e.target.value);
+			setYearInput(Number(e.target.value));
 		}
 	}
 
-	function handleMonthChange(e) {
-		setMonthInput(e.target.value);
+	function handleMonthChange(e: ChangeEvent<HTMLSelectElement>) {
+		setMonthInput(Number(e.target.value));
 	}
 
 	return (

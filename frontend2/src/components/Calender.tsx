@@ -1,34 +1,34 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import  { ChangeEvent, useEffect, useState } from "react";
 import { getCurrentMonth, getCurrentYear, months } from "../utils/utils";
 import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { selectAuthCustomer } from "../features/auth/authSlice";
 
-//green (appointment date)  orange (past appointment date)
 const currentYear = getCurrentYear();
 const currentMonth = getCurrentMonth();
 
 interface  currentAppointmentDate {
+	day: string;
+	appointment:boolean;		
 	appointmentInfo: {
 		date: string;
 		time: string;
 		appointmentId: string;
 		hairStyleId: string;
-		completed: boolean
-	}
+	}[];
+	passedCurrentDate: boolean;
 }
 
 interface CalenderProp {
 	setCurrentAppointmentDate: (date: currentAppointmentDate)=> void;
-	providedCalenderContent: undefined | unknown[];
 	setAppointmentInfoModal: (modal: boolean)=> void;
 	generateCalender: any;
 	data: any;
 	isLoading: boolean;
 }
+
 const Calender = ({
 	setCurrentAppointmentDate,
-	providedCalenderContent,
 	setAppointmentInfoModal,
 	generateCalender,
 	data,
@@ -43,25 +43,9 @@ const Calender = ({
 	const customer = useSelector(selectAuthCustomer);
 
 	let calenderContent;
-	if (providedCalenderContent) {
-		calenderContent = providedCalenderContent.map((value:any) => (
-			<div
-				className={`border-2 border-red-100 p-4 grid place-content-center ${
-					value.appointment && "bg-green-500"
-				}`}
-				key={uuidv4()}
-				onClick={() => {
-					console.log(value, "DATE IN CALENDERRR VALUESS!!!!!!!!!!1");
-					setCurrentAppointmentDate(value);
-					setAppointmentInfoModal(true);
-				}}
-			>
-				{value?.day}
-			</div>
-		));
-	} else {
+
 		
-		calenderContent = data?.calender?.map((value: any) => (
+	calenderContent = data?.calender?.map((value: any) => (
 			<div
 				className={`border-2 border-red-100 p-4 grid place-content-center ${
 					value.appointment && "bg-green-300 text-white"
@@ -77,9 +61,9 @@ const Calender = ({
 			>
 				{value?.day}
 			</div>
-		));
+	));
 	
-	}
+	
 
 	function next(number:number) {
 		if (number < 11) {

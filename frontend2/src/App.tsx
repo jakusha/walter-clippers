@@ -7,6 +7,8 @@ import Dashboard from "./features/dashboard/Dashboard";
 import RequireAuth from "./components/RequireAuth";
 import PersistLogin from "./components/PersistLogin";
 import History from "./features/dashboard/History";
+import DetermineDashboard from "./features/dashboard/DetermineDashboard";
+import HairStyle from "./features/dashboard/HairStyle";
 
 function App() {
 	return (
@@ -20,7 +22,7 @@ function App() {
 					element={
 						<PersistLogin>
 							<RequireAuth>
-								<Dashboard />
+								<DetermineDashboard />
 							</RequireAuth>
 						</PersistLogin>
 					}
@@ -35,6 +37,17 @@ function App() {
 						</PersistLogin>
 					}
 				/>
+				<Route
+					path="/hairstyle"
+					element={
+						<PersistLogin>
+							<RequireAuth allowedRoles={[4848]}>
+								<HairStyle />
+							</RequireAuth>
+						</PersistLogin>
+					}
+				/>
+				
 				<Route path="*" element={<NoMatch />} />
 			</Routes>
 		</BrowserRouter>

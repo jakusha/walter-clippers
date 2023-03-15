@@ -83,13 +83,14 @@ async function handleUpdateHairStyle(req, res) {
 		}
 
 		//check if hairstyle exist in database
-		const foundName = await HairStyle.findOne({
+		const foundValue = await HairStyle.findOne({
 			where: {
 				name: value.name,
+				price: value.price,
 			},
 		});
 
-		if (foundName) {
+		if (foundValue) {
 			return res
 				.status(400)
 				.json({ message: "hair style already exists" });

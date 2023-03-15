@@ -11,6 +11,8 @@ const authRouter = require("./router/authentication");
 const calenderRouter = require("./router/calender");
 const Roles = require("./model/Roles");
 const corsOptions = require("./config/corsOption");
+const { verifyJwt } = require("./middlewares/verifyJwt");
+const { verifyRoles } = require("./middlewares/verifyRoles");
 
 //plarse cookies
 app.use(cookieParser());
@@ -30,11 +32,11 @@ app.get("/", (req, res) => {
 	res.json({ message: "hello world" });
 });
 
-app.use("/customer", customerRouter);
-app.use("/appointment", appointmentRouter);
-app.use("/hairstyle", hairStyleRouter);
+app.use("/customer", verifyJwt, customerRouter);
+app.use("/appointment", verifyJwt, appointmentRouter);
+app.use("/hairstyle", verifyJwt, hairStyleRouter);
 app.use("/auth", authRouter);
-app.use("/calender", calenderRouter);
+app.use("/calender", verifyJwt, calenderRouter);
 
 const PORT = 3333;
 

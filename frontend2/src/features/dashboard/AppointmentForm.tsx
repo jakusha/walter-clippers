@@ -4,6 +4,7 @@ import {
 	useUpdateAppointmentMutation,
 	useGetAvailableTimeMutation,
 	HairStyle,
+	useGetAllHairStylesQuery,
 } from "../appointments/appointmentApiSlice";
 import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
@@ -12,7 +13,6 @@ import TimeInput from "../../components/TimeInput";
 import { DateTime } from "luxon";
 import { schema } from "../../joiValidations/createAppointment";
 import { selectAuthCustomer } from "../auth/authSlice";
-import { selectHairStyle } from "../appointments/appointmentSlice";
 
 
 interface AppointmentFormProp {
@@ -45,7 +45,9 @@ const AppointmentForm = ({ currentDate, previosData = null }: AppointmentFormPro
 	const [getAvailableTime, { data: timeData }] =
 		useGetAvailableTimeMutation();
 
-	const hairData = useSelector(selectHairStyle);
+	
+	const {data:hairData} = useGetAllHairStylesQuery();
+
 	console.log(hairData, "HAIR DATA");
 	const [createNewAppointment] = useCreateNewAppointmentMutation();
 	const [updateAppointment] = useUpdateAppointmentMutation();
@@ -67,7 +69,7 @@ const AppointmentForm = ({ currentDate, previosData = null }: AppointmentFormPro
 		return () => clearTimeout(errorTimeout);
 	}, [fetchError]);
 	// console.log(hairData?.hairStyles, "DROPDPWN VAUESSS!!!!!");
-	const hairStyleDropDown = hairData.map((hairstyle: {name: string, price: string, hairStyleId: string}) => (
+	const hairStyleDropDown = hairData?.hairStyles?.map((hairstyle: {name: string, price: string, hairStyleId: string}) => (
 		<option value={hairstyle.hairStyleId} key={uuidv4()}>
 			{hairstyle.name} - {hairstyle.price}
 		</option>
@@ -77,7 +79,7 @@ const AppointmentForm = ({ currentDate, previosData = null }: AppointmentFormPro
 		console.log(hairId, "HAIR ID INFOOO!!!!!!!!!!!!!1");
 		console.log(hairData);
 		if (hairId) {
-			const result:any = hairData?.find(
+			const result:any = hairData?.hairStyles?.find(
 				(hair:HairStyle) => hair.hairStyleId === hairId
 			);
 			return result;

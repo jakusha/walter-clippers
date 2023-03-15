@@ -20,6 +20,7 @@ export interface HairStyle {
 export const appointmentApiSlice = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		getCustomerAppointments: builder.query({
+
 			query: (customerid) => `/appointment/customer/${customerid}`,
 			transformResponse: (response: Response) => {
 				console.log(response, "TRANSFORMED RESPONSE!!!!!!!!!!!11");
@@ -31,29 +32,55 @@ export const appointmentApiSlice = apiSlice.injectEndpoints({
 
 				return sorted;
 			},
+			providesTags: ['Appointment'],
 		}),
 		getAvailableTime: builder.mutation({
-			query: (date) => `/appointment/availtime/${date}`,
+			query: (date:string) => `/appointment/availtime/${date}`,
 		}),
 		generateCalenderModal: builder.mutation({
 			query: (info) =>
 				`/calender/${info.custId}/${info.month}/${info.year}/modal`,
+			
 		}),
-		generateCalender: builder.mutation({
-			query: (info) =>
+		generateCalender: builder.query({
+			query: (info: {year:string, month: string, custid: string}) =>
 				`/calender/${info.custid}/${info.month}/${info.year}`,
+			providesTags: ['Appointment'],
 		}),
-		getAllHairStyles: builder.mutation({
+		getAllHairStyles: builder.query<any, void>({
 			query: () => `/hairstyle/`,
+			providesTags: ["Hairstyle"]
+		}),
+		createNewHairStyle: builder.mutation({
+			query({ body }) {
+				return {
+					url: `/hairstyle`,
+					method: "POST",
+					body: body,
+				};
+			},
+			invalidatesTags: ["Hairstyle"]
+		}),
+		updateHairStyle: builder.mutation({
+			query({ hairStyleId, body }:{hairStyleId: string, body: unknown}) {
+				return {
+					url: `/hairstyle/${hairStyleId}`,
+					method: "PUT",
+					body: body,
+				};
+			},
+			invalidatesTags: ["Hairstyle"]
 		}),
 		createNewAppointment: builder.mutation({
-			query({ custId, body }) {
+			query: ({ custId, body }) => {
 				return {
 					url: `/appointment/create/${custId}`,
 					method: "POST",
 					body: body,
 				};
 			},
+			invalidatesTags: ["Appointment"],
+			
 		}),
 		updateAppointment: builder.mutation({
 			query({ appointmentId, body }) {
@@ -67,6 +94,7 @@ export const appointmentApiSlice = apiSlice.injectEndpoints({
 				console.log(response, "response data !!!!1 from request");
 				return response;
 			},
+			invalidatesTags: ["Appointment"]
 		}),
 		deleteApppointment: builder.mutation({
 			query(appointmentId) {
@@ -75,6 +103,7 @@ export const appointmentApiSlice = apiSlice.injectEndpoints({
 					method: "DELETE",
 				};
 			},
+			invalidatesTags: ["Appointment"]
 		}),
 	}),
 });
@@ -82,10 +111,12 @@ export const appointmentApiSlice = apiSlice.injectEndpoints({
 export const {
 	useGetCustomerAppointmentsQuery,
 	useGetAvailableTimeMutation,
-	useGenerateCalenderMutation,
+	useLazyGenerateCalenderQuery,
 	useGenerateCalenderModalMutation,
-	useGetAllHairStylesMutation,
+	useGetAllHairStylesQuery,
 	useCreateNewAppointmentMutation,
 	useUpdateAppointmentMutation,
 	useDeleteApppointmentMutation,
+	useUpdateHairStyleMutation,
+	useCreateNewHairStyleMutation
 } = appointmentApiSlice;
