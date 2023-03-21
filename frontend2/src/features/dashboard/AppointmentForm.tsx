@@ -42,7 +42,7 @@ const AppointmentForm = ({ currentDate, previosData = null }: AppointmentFormPro
 			time: "",
 		};
 	});
-	const [getAvailableTime, { data: timeData }] =
+	const [getAvailableTime, { data: timeData, isLoading: timeLoading }] =
 		useGetAvailableTimeMutation();
 
 	
@@ -53,12 +53,16 @@ const AppointmentForm = ({ currentDate, previosData = null }: AppointmentFormPro
 	const [updateAppointment] = useUpdateAppointmentMutation();
 	const [fetchError, setFetchError] = useState<null | string>();
 	const [fetchSuccess, setFetchSuccess] = useState();
-
+	const [previousDate, setPreviousDate] = useState("");
+	
 	useEffect(() => {
 		const dateObj = new Date(formData?.date);
 		const newDate = DateTime.fromJSDate(dateObj).toISODate();
-		console.log(newDate);
-		getAvailableTime(newDate);
+		if(previousDate !== newDate) {
+			getAvailableTime(newDate);
+		}
+		setPreviousDate(newDate)
+
 	}, [formData, getAvailableTime]);
 
 	useEffect(() => {
@@ -102,6 +106,7 @@ const AppointmentForm = ({ currentDate, previosData = null }: AppointmentFormPro
 		});
 	}
 
+	
 	function handleTime(time:string) {
 		setFormData({
 			...formData,
@@ -169,6 +174,7 @@ const AppointmentForm = ({ currentDate, previosData = null }: AppointmentFormPro
 	}
 
 	let content;
+	console.log(timeLoading, "TIME IS LOADING")
 
 	if (fetchSuccess) {
 		//todo: success modal

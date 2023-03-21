@@ -140,8 +140,8 @@ const Calender = ({
 	}, [yearInput, monthInput, customer, generateCalender]);
 	return (
 		<div>
-			<div className="  border-red-500 border-8 flex-1">
-				<div className="flex justify-between px-4">
+			<div className="border-2 mx-1 p-2 flex-1">
+				<div className="flex justify-between items-center px-2">
 					<button
 						className="bg-blue-100 p-2"
 						onClick={() => previous(monthInput)}
@@ -150,7 +150,7 @@ const Calender = ({
 						left
 					</button>
 
-					<h3 className="text-lg">
+					<div className="text-lg">
 						<select value={monthInput} onChange={handleMonthChange}>
 							{generateMonthDropdown()}
 						</select>
@@ -163,7 +163,7 @@ const Calender = ({
 						/>
 
 						<div></div>
-					</h3>
+					</div>
 					<button
 						className="bg-blue-100 p-2"
 						onClick={() => next(monthInput)}
@@ -172,25 +172,25 @@ const Calender = ({
 					</button>
 				</div>
 				<div className="border-2 border-blue-300 grid grid-cols-7 grid-rows-5">
-					<div className="border-2 border-red-100 p-4 grid place-content-center">
+					<div className=" p-4 grid place-content-center">
 						Sun
 					</div>
-					<div className="border-2 border-red-100 p-4 grid place-content-center">
+					<div className=" p-4 grid place-content-center">
 						Mon
 					</div>
-					<div className="border-2 border-red-100 p-4 grid place-content-center">
+					<div className=" p-4 grid place-content-center">
 						Tue
 					</div>
-					<div className="border-2 border-red-100 p-4 grid place-content-center">
+					<div className=" p-4 grid place-content-center">
 						Wed
 					</div>
-					<div className="border-2 border-red-100 p-4 grid place-content-center">
+					<div className=" p-4 grid place-content-center">
 						Thurs
 					</div>
-					<div className="border-2 border-red-100 p-4 grid place-content-center">
+					<div className="p-4 grid place-content-center">
 						Fri
 					</div>
-					<div className="border-2 border-red-100 p-4 grid place-content-center">
+					<div className="p-4 grid place-content-center">
 						Sat
 					</div>
 					{calenderContent}

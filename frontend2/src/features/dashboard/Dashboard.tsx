@@ -124,7 +124,7 @@ const Dashboard = () => {
 
 	return (
 		<div>
-			<nav className="flex justify-between">
+			<nav className="flex justify-between border-2 border-red-300 items-baseline">
 				{" "}
 				<span className="text-2xl">cutzy</span>
 				<div className="flex gap-8">
@@ -135,7 +135,7 @@ const Dashboard = () => {
 
 			<h1>Welcome {customer?.username}</h1>
 			<p>{customer?.email}</p>
-			<div className="flex">
+			<div className="flex flex-col">
 				<div className="border-2 border-yellow-200">
 					
 					<Calender
