@@ -49,8 +49,8 @@ async function handleCreateCustomer(req, res) {
 
 	if (foundCustomer)
 		return res
-			.json({ message: "username or email is already in use" })
-			.status(400);
+			.status(400)
+			.json({ message: "username or email is already in use" });
 
 	//hashing the password and creating customer
 	try {

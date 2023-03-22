@@ -41,8 +41,8 @@ const AppointmentItem = ({
 		(style) => style.hairStyleId === appointment.hairStyleId
 	)?.name;
 	return (
-		<div>
-			{appointment?.date} {style}{" "}
+		<div className="py-4 p-2 flex justify-between shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] bg-stone-100">
+			<span>{appointment?.date} {style} </span>{" "}
 			<span
 				onClick={() => {
 					console.log(appointment);

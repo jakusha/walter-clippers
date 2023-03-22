@@ -90,6 +90,7 @@ async function handleGetCustomerCalender(req, res) {
 				year,
 				dateToAppointment
 			);
+			result = result.sort((a, b) => new Date(a.date) - new Date(b.date));
 			return res.json({ value, calender, result, dateToAppointment });
 		} else {
 			return res.status(400).json({ message: "invalid customer id" });
@@ -199,6 +200,7 @@ function daysInMonth(iMonth, iYear) {
 function generateFullCalender(month, year, previosAppointments) {
 	const calender = [];
 	const days = daysInMonth(month, year);
+
 	let firstDay = new Date(year, month, 1).getDay();
 
 	for (let i = 0; i < firstDay; i++) {
@@ -206,13 +208,33 @@ function generateFullCalender(month, year, previosAppointments) {
 	}
 
 	for (let i = 1; i <= days; i++) {
+		const sameDay =
+			new Date(`${year}-0${month + 1}-0${i}`).getDate() ===
+				new Date(new Date().toISOString().substring(0, 10)).getDate() &&
+			new Date(`${year}-0${month + 1}-0${i}`).getMonth() ===
+				new Date(
+					new Date().toISOString().substring(0, 10)
+				).getMonth() &&
+			new Date(`${year}-0${month + 1}-0${i}`).getFullYear() ===
+				new Date(
+					new Date().toISOString().substring(0, 10)
+				).getFullYear();
+		let condition =
+			new Date(`${year}-0${month + 1}-0${i}`) <
+			new Date(new Date().toISOString().substring(0, 10));
+		let hasPassed = sameDay ? false : condition;
+
 		if (previosAppointments[i]) {
-			calender.push(previosAppointments[i]);
+			calender.push({
+				...previosAppointments[i],
+				hasPassed,
+			});
 		} else {
 			calender.push({
 				day: i,
 				appointment: false, //show green on calender if true else leave plain
 				appointmentInfo: [],
+				hasPassed,
 			});
 		}
 	}

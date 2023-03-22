@@ -18,6 +18,7 @@ import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 
 
+
 interface Appointment {
 	date?: string;
 	time?: string;
@@ -97,14 +98,13 @@ const Dashboard = () => {
 		content = <div>An error occured</div>;
 	} else if (calenderData) {
 		content = (
-			<div>
+			<div className="flex flex-col gap-2 mb-10">
 				{calenderData?.result
 					.filter(
 						(appointment:any) =>
 							appointment?.date >=
 							new Date().toISOString().slice(0, 10)
-					)
-					.map((appointment:Appointment) => (
+					).map((appointment:Appointment) => (
 						<AppointmentItem
 							appointment={appointment}
 							hairStyle={hairStyleData?.hairStyles}
@@ -116,6 +116,7 @@ const Dashboard = () => {
 							key={uuidv4()}
 						/>
 					))}
+					
 			</div>
 		);
 	} else {
@@ -126,17 +127,17 @@ const Dashboard = () => {
 		<div>
 			<nav className="flex justify-between border-2 border-red-300 items-baseline">
 				{" "}
-				<span className="text-2xl">cutzy</span>
+				<span className="text-2xl">walter</span>
 				<div className="flex gap-8">
 					<Link to={"/history"}>history</Link>
 					<button onClick={handleLogout}>Log out</button>
 				</div>
 			</nav>
 
-			<h1>Welcome {customer?.username}</h1>
+			<h1 className="text-2xl mt-4">Welcome {customer?.username}</h1>
 			<p>{customer?.email}</p>
-			<div className="flex flex-col">
-				<div className="border-2 border-yellow-200">
+			<div className="flex flex-col gap-8 px-3">
+				<div className="">
 					
 					<Calender
 						setCurrentAppointmentDate={setCurrentAppointmentDate}
@@ -147,10 +148,12 @@ const Dashboard = () => {
 				</div>
 				<div className="border-2 border-green-300 flex-1">
 					<div>
-						<div className="flex justify-between">
-							<h3>upcoming appointments this month</h3>
-							<button onClick={() => setShowModal(true)}>
-								Create appointment
+						<div className="flex flex-col justify-between items-center">
+							<h3 className="capitalize text-lg text-center font-semibold">upcoming appointments this month</h3>
+
+							<button onClick={() => setShowModal(true)} className="border-2 border-red-100 flex items-center self-start capitalize mt-2 mb-4">
+							<svg xmlns="http://www.w3.org/2000/svg" className="ionicon w-8 h-8 text-[#5f656e]" viewBox="0 0 512 512"><title>Add</title><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M256 112v288M400 256H112"/></svg>
+							create new appointment
 							</button>
 						</div>
 						{showModal &&
@@ -184,7 +187,7 @@ const Dashboard = () => {
 							)}
 						{appointmentInfoModal &&
 							createPortal(
-								<div className="bg-transparent border-2 border-red-300 absolute top-0 left-0 right-0 h-screen w-screen py-10">
+								<div className="bg-[rgba(0,0,0,.2)] fixed p-4 border-2 border-red-300 z-40 top-0 left-0 right-0 h-screen w-screen">
 									<AppointmentInfo
 										currentAppointmentDate={
 											currentAppointmentDate

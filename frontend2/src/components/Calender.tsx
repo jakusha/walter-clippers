@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { selectAuthCustomer } from "../features/auth/authSlice";
 
+
 const currentYear = getCurrentYear();
 const currentMonth = getCurrentMonth();
 
@@ -17,6 +18,7 @@ interface  currentAppointmentDate {
 		hairStyleId: string;
 	}[];
 	passedCurrentDate: boolean;
+	hasPassed: boolean;
 }
 
 interface CalenderProp {
@@ -47,9 +49,9 @@ const Calender = ({
 		
 	calenderContent = data?.calender?.map((value: any) => (
 			<div
-				className={`border-2 border-red-100 p-4 grid place-content-center ${
-					value.appointment && "bg-green-300 text-white"
-				} ${value.passedCurrentDate && "bg-orange-200 text-white"}`}
+				className={` rounded-full grid place-content-center w-10 h-10 ${
+					value.appointment  && value.hasPassed === false && "bg-green-300 text-white"
+				} ${value.hasPassed && "text-[#cdcdcf]"} ${value.appointment  && value.hasPassed && "bg-green-200"} `}
 				key={uuidv4()}
 				onClick={() => {
 					console.log(value, "DATE IN CALENDERRR VALUESS!!!!!!!!!!1");
@@ -140,14 +142,15 @@ const Calender = ({
 	}, [yearInput, monthInput, customer, generateCalender]);
 	return (
 		<div>
-			<div className="border-2 mx-1 p-2 flex-1">
+			
+			<div className=" p-3 flex-1 shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] ">
 				<div className="flex justify-between items-center px-2">
 					<button
-						className="bg-blue-100 p-2"
+						className="p-2"
 						onClick={() => previous(monthInput)}
 						disabled={validPrevious()}
 					>
-						left
+						<svg xmlns="http://www.w3.org/2000/svg" className="ionicon w-6 h-6" viewBox="0 0 512 512"><title>Chevron Back</title><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M328 112L184 256l144 144"/></svg>
 					</button>
 
 					<div className="text-lg">
@@ -165,33 +168,33 @@ const Calender = ({
 						<div></div>
 					</div>
 					<button
-						className="bg-blue-100 p-2"
+						className="p-2"
 						onClick={() => next(monthInput)}
 					>
-						right
+						<svg xmlns="http://www.w3.org/2000/svg" className="ionicon w-6 h-6" viewBox="0 0 512 512"><title>Chevron Forward</title><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M184 112l144 144-144 144"/></svg>
 					</button>
 				</div>
-				<div className="border-2 border-blue-300 grid grid-cols-7 grid-rows-5">
-					<div className=" p-4 grid place-content-center">
-						Sun
+				<div className=" grid grid-cols-7 grid-rows-5 gap-2">
+					<div className="py-2 grid place-content-center font-semibold">
+						Su
 					</div>
-					<div className=" p-4 grid place-content-center">
-						Mon
+					<div className="py-2 grid place-content-center font-semibold">
+						Mo
 					</div>
-					<div className=" p-4 grid place-content-center">
-						Tue
+					<div className="py-2 grid place-content-center font-semibold">
+						Tu
 					</div>
-					<div className=" p-4 grid place-content-center">
-						Wed
+					<div className="py-2 grid place-content-center font-semibold">
+						We
 					</div>
-					<div className=" p-4 grid place-content-center">
-						Thurs
+					<div className="py-2 grid place-content-center font-semibold">
+						Th
 					</div>
-					<div className="p-4 grid place-content-center">
-						Fri
+					<div className="py-2 grid place-content-center font-semibold">
+						Fr
 					</div>
-					<div className="p-4 grid place-content-center">
-						Sat
+					<div className="py-2 grid place-content-center font-semibold">
+						Sa
 					</div>
 					{calenderContent}
 				</div>
