@@ -53,4 +53,4 @@ I've made the documentation to be quite explanatory and easy to use, [click here
 
 ## 🤓 Author(s)
 
-**Ebube** [![Twitter Follow](https://img.shields.io/twitter/follow/Ebube?style=social)](https://twitter.com/_jaskusha)
+**Ebube** [![Twitter Follow](https://img.shields.io/twitter/follow/Ebube?style=social)](https://twitter.com/_jakusha)
