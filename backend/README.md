@@ -50,6 +50,7 @@ An API for a salon appointment,built with node, javascript, express, sequelize a
 - work on the delete comment route -->
 
 I've made the documentation to be quite explanatory and easy to use, [click here](https://app.swaggerhub.com/apis-docs/jakusha/walters-clippers/1.0.0#/) for more information on how to use.
+[click](https://app.swaggerhub.com/apis-docs/jakusha/walters-clippers/1.0.0#/)
 
 
 ## 🤓 Author(s)
