@@ -1,4 +1,5 @@
 const { Sequelize } = require("sequelize");
+require("dotenv").config();
 
 const dbConfig = {
 	HOST: "localhost",
@@ -18,7 +19,7 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
 });
 
 // const sequelize = new Sequelize(
-// 	"postgres://rxwqlgql:ZxRFkFfWHK69eFTj9mGZrHlyKs6YcTRD@mahmud.db.elephantsql.com/rxwqlgql",
+// 	process.env.REFRESH_TOKEN_SECRET,
 // 	{
 // 		dialect: "postgres",
 // 		protocol: "postgres",
