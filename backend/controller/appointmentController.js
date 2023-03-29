@@ -7,11 +7,17 @@ const { DateTime } = require("luxon");
 const Customer = require("../model/Customer");
 const HairStyle = require("../model/HairStyle");
 const updateAppointment = require("../validationjoi/appointments/updateAppointment");
+const {
+	emailFunction,
+	newAppointment,
+	updateAppointment: updateEmailAppointment,
+	deleteAppointment,
+} = require("../config/emailMessages");
 
 function validateTime(time, date) {
 	const currentDate = new Date().toISOString().substring(0, 10);
 	date = new Date(date).toISOString().substring(0, 10);
-	// console.log(time, date, currentDate, parseInt(time) > DateTime.now().hour);
+
 	let timeValid;
 	if (date <= currentDate) {
 		timeValid =
@@ -36,7 +42,7 @@ async function handleCreateAppointMent(req, res) {
 			if (error) {
 				return res.status(400).json({ error: error.message });
 			}
-			console.log(value);
+
 			const timeValid = validateTime(value.time, value.date);
 
 			if (!timeValid)
@@ -77,10 +83,23 @@ async function handleCreateAppointMent(req, res) {
 				...value,
 				custId,
 			});
+
+			const hairstyleInfo = await HairStyle.findByPk(value.hairStyleId);
+			emailFunction(
+				"New Haircut Appointment",
+				newAppointment(
+					hairstyleInfo.name,
+					hairstyleInfo.price,
+					value.time,
+					value.date
+				),
+				req.email
+			);
+
 			return res.json({
 				result,
 				message: "successfully created anappointment",
-				foundAppointment: appointment,
+				hairstyleInfo,
 			});
 		} else {
 			return res.status(400).json({ error: "invalid customer id" });
@@ -93,7 +112,6 @@ async function handleCreateAppointMent(req, res) {
 //get all appointments belonging to a customer
 async function handleGetAllCustomerAppointMent(req, res) {
 	const custId = req.params.custId;
-	console.log(req.user === "admin", "USER ROLEEEE APPOINTMENT");
 	//check if its a valid customer id
 	try {
 		const validCustomer = await Customer.findByPk(custId);
@@ -135,42 +153,18 @@ async function handleUpdateAppointment(req, res) {
 	try {
 		//check valid appointment id
 		const result = await Appointment.findByPk(appointmentId);
-		console.log(value.custId, "CUSTOMER ID");
-		console.log("FOOunndddddd APPOINTMENTTTSSSS !!!!!!!!!!!!1", result);
+
 		if (result) {
 			const timeValid = validateTime(value.time, value.date);
-
 			if (!timeValid)
 				return res
 					.json({ error: "invalid appointment time" })
 					.status(400);
-			console.log(value, "asdadadasd=======11111110000000000");
+
 			const validHairstyle = await HairStyle.findByPk(value.hairStyleId);
 			const validCustomerId = await Customer.findByPk(value.custId);
-			console.log(
-				!!validHairstyle,
-				!!validCustomerId,
-				"DATEAA!!!!!!!!!!!~~~~~~~~~~~"
-			);
+
 			if (validHairstyle && validCustomerId) {
-				// return res.json({ message: "good data" });
-
-				// const appointment = await Appointment.findOne({
-				// 	where: {
-				// 		[Op.and]: [
-				// 			{ custId: value.custId },
-				// 			{ date: value.date },
-				// 		],
-				// 	},
-				// });
-
-				// if (appointment) {
-				// 	return res.status(400).json({
-				// 		message:
-				// 			"appointment date is not available, you cant create more than one appointment per day",
-				// 	});
-				// }
-
 				//check if time and date is available
 				const foundAppointment = await Appointment.findOne({
 					where: {
@@ -197,6 +191,20 @@ async function handleUpdateAppointment(req, res) {
 						},
 					}
 				);
+
+				const hairstyleInfo = await HairStyle.findByPk(
+					value.hairStyleId
+				);
+				emailFunction(
+					"Update Haircut Appointment",
+					updateEmailAppointment(
+						hairstyleInfo.name,
+						hairstyleInfo.price,
+						value.time,
+						value.date
+					),
+					req.email
+				);
 				return res.status(202).json({ message: "appointment updated" });
 			} else {
 				return res
@@ -209,8 +217,6 @@ async function handleUpdateAppointment(req, res) {
 	} catch (error) {
 		return res.status(500).json({ error: error.message });
 	}
-
-	return res.json({ value, error });
 }
 
 async function handleDeleteAppointment(req, res) {
@@ -218,14 +224,17 @@ async function handleDeleteAppointment(req, res) {
 
 	try {
 		const result = await Appointment.findByPk(appointmentId);
-
-		console.log(result);
 		if (result) {
 			await Appointment.destroy({
 				where: {
 					appointmentId: appointmentId,
 				},
 			});
+			emailFunction(
+				"Haircut Appointment Deleted",
+				deleteAppointment(result.date),
+				req.email
+			);
 			return res.json({ message: "Appointment deleted successfull" });
 		} else {
 			return res
@@ -328,7 +337,6 @@ async function handleGetAppointmentInfo(req, res) {
 	try {
 		const result = await Appointment.findByPk(appointmentId);
 
-		console.log(result);
 		if (result) {
 			const result = await Appointment.findByPk(appointmentId);
 			return res.json({ result });

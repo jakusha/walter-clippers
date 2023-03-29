@@ -4,7 +4,7 @@ const createUserSchema = require("../validationjoi/customers/newcustomer");
 const updateCustomer = require("../validationjoi/customers/updateCustomer");
 const { Op } = require("sequelize");
 const UserRoles = require("../model/UserRoles");
-const Roles = require("../model/Roles");
+const { newCustomer, emailFunction } = require("../config/emailMessages");
 
 async function handleGetAllCustomers(req, res) {
 	const customers = await Customer.findAll();
@@ -36,6 +36,7 @@ async function handleGetCustomer(req, res) {
 }
 async function handleCreateCustomer(req, res) {
 	const { value, error } = createUserSchema.validate(req.body);
+
 	if (error) {
 		return res.json({ message: error.message }).status(400);
 	}
@@ -68,8 +69,12 @@ async function handleCreateCustomer(req, res) {
 			custId: newcustomer.custId,
 			roleId: 4848,
 		});
-		console.log(newcustomer);
 
+		emailFunction(
+			"New Walter Clippers Customer",
+			newCustomer(value.username),
+			value.email
+		);
 		return res.json({
 			message: "successfully created account",
 			newcustomer,

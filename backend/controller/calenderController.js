@@ -91,6 +91,7 @@ async function handleGetCustomerCalender(req, res) {
 				dateToAppointment
 			);
 			result = result.sort((a, b) => new Date(a.date) - new Date(b.date));
+
 			return res.json({ value, calender, result, dateToAppointment });
 		} else {
 			return res.status(400).json({ message: "invalid customer id" });

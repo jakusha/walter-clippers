@@ -37,18 +37,21 @@ async function handleLogin(req, res) {
 			{
 				username: foundCustomer.username,
 				roles: rolesResult,
+				email: foundCustomer.email,
 			},
 			process.env.ACCESS_TOKEN_SECRET,
-			{ expiresIn: "5m" }
+			{ expiresIn: "3h" }
 		);
 
 		console.log(accessToken, "ACCCESSS TOKKKEENN !!!!!!!!!!!!!!!11");
 		const refreshToken = jwt.sign(
 			{
 				username: foundCustomer.username,
+				roles: rolesResult,
+				email: foundCustomer.email,
 			},
 			process.env.REFRESH_TOKEN_SECRET,
-			{ expiresIn: "60m" }
+			{ expiresIn: "7d" }
 		);
 
 		//save refresh token in dateabse
@@ -59,7 +62,7 @@ async function handleLogin(req, res) {
 			httpOnly: true,
 			secure: true,
 			sameSite: "None",
-			maxAge: 300000,
+			maxAge: 7 * 24 * 60 * 60 * 1000,
 		});
 		const { username, email, custId } = foundCustomer;
 		const customer = { username, email, custId };
@@ -132,10 +135,11 @@ async function handleRefreshToken(req, res) {
 			const accessToken = jwt.sign(
 				{
 					username: foundCustomer.username,
+					email: foundCustomer.email,
 					roles: rolesResult,
 				},
 				process.env.ACCESS_TOKEN_SECRET,
-				{ expiresIn: "5m" }
+				{ expiresIn: "1d" }
 			);
 			const { username, email, custId } = foundCustomer;
 			const customer = { username, email, custId };

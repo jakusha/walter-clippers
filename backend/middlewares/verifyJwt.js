@@ -9,12 +9,13 @@ function verifyJwt(req, res, next) {
 
 		req.username = decoded.username;
 		req.roles = decoded.roles;
+		req.email = decoded.email;
 
 		console.log(decoded.roles, "DECODED CUSTOMER ROLE!!!");
 		if (decoded.roles.includes(4848)) {
-			req.user = "admin";
-		} else {
 			req.user = "customer";
+		} else {
+			req.user = "admin";
 		}
 
 		next();
