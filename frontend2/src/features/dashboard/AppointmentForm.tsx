@@ -13,7 +13,7 @@ import TimeInput from "../../components/TimeInput";
 import { DateTime } from "luxon";
 import { schema } from "../../joiValidations/createAppointment";
 import { selectAuthCustomer } from "../auth/authSlice";
-
+import confetti from "../../assets/Confetti.png"
 
 interface AppointmentFormProp {
     currentDate?: string;
@@ -25,6 +25,12 @@ interface FormDataState {
 		date: string;
 		time: string;
 		appointmentId?: string;
+}
+
+
+interface Message {
+	type: string;
+	value: string;
 }
 
 const AppointmentForm = ({ currentDate, previosData = null }: AppointmentFormProp) => {
@@ -51,11 +57,12 @@ const AppointmentForm = ({ currentDate, previosData = null }: AppointmentFormPro
 	console.log(hairData, "HAIR DATA");
 	const [createNewAppointment] = useCreateNewAppointmentMutation();
 	const [updateAppointment] = useUpdateAppointmentMutation();
-	const [fetchError, setFetchError] = useState<null | string>();
+	const [message, setMessage] = useState<Message>({type: "normal", value: ""})
 	const [fetchSuccess, setFetchSuccess] = useState();
 	const [previousDate, setPreviousDate] = useState("");
-	
+
 	useEffect(() => {
+		console.log("rendering here!!!!!11")
 		const dateObj = new Date(formData?.date);
 		const newDate = DateTime.fromJSDate(dateObj).toISODate();
 		if(previousDate !== newDate) {
@@ -67,17 +74,18 @@ const AppointmentForm = ({ currentDate, previosData = null }: AppointmentFormPro
 
 	useEffect(() => {
 		const errorTimeout = setTimeout(() => {
-			setFetchError(null);
+			setMessage({type: "normal", value: ""})
 		}, 3000);
 
 		return () => clearTimeout(errorTimeout);
-	}, [fetchError]);
+	}, [message.type]);
 	// console.log(hairData?.hairStyles, "DROPDPWN VAUESSS!!!!!");
 	const hairStyleDropDown = hairData?.hairStyles?.map((hairstyle: {name: string, price: string, hairStyleId: string}) => (
 		<option value={hairstyle.hairStyleId} key={uuidv4()}>
 			{hairstyle.name} - {hairstyle.price}
 		</option>
 	));
+
 
 	function getHairStylePrice(hairId: string):null|HairStyle {
 		console.log(hairId, "HAIR ID INFOOO!!!!!!!!!!!!!1");
@@ -130,6 +138,7 @@ const AppointmentForm = ({ currentDate, previosData = null }: AppointmentFormPro
 		console.log(value, "VALUEESSSS!!!!!!!!!!");
 
 		if (error) {
+			setMessage({type: "error", value: error.message})
 			console.log(error, "ERROR FROM VALIDATION!!!!!!!");
 		} else {
 			try {
@@ -144,10 +153,12 @@ const AppointmentForm = ({ currentDate, previosData = null }: AppointmentFormPro
 					}).unwrap();
 
 					if (result?.error) {
-						setFetchError(result?.error);
+						
+						setMessage({type: "error", value: result?.error});
 					} else {
 						setFetchSuccess(result?.message);
 					}
+					console.log(result, "RESULT FROM UPDATE")
 					console.log(
 						value,
 						result,
@@ -160,7 +171,7 @@ const AppointmentForm = ({ currentDate, previosData = null }: AppointmentFormPro
 					}).unwrap();
 
 					if (result.error) {
-						setFetchError(result.error);
+						setMessage(result.error);
 					} else {
 						setFetchSuccess(result.message);
 					}
@@ -179,43 +190,50 @@ const AppointmentForm = ({ currentDate, previosData = null }: AppointmentFormPro
 	if (fetchSuccess) {
 		//todo: success modal
 		content = (
-			<div>
-				<h2>{fetchSuccess}</h2> /
+			<div className="grid place-content-center gap-2 pt-4">
+				<img src={confetti} alt="confetti image" className="w-30 h-30 mx-auto mb-10"/>
+				<p className="text-xl capitalize">{fetchSuccess}</p>
 			</div>
 		);
 	} else {
 		content = (
-			<form onSubmit={handleSubmit}>
-				<div>
-					<label htmlFor="hairStyleId">style:</label>
-					<select
-						onChange={handlehairStyle}
-						id="hairStyleId"
-						value={formData.hairStyleId}
-					>
-						<option value="">Select...</option>
-						{hairStyleDropDown}
-					</select>
-				</div>
-				<div>
-					<span>price:</span>
-					<span>
-						{getHairStylePrice(formData.hairStyleId)?.price}
-					</span>
-				</div>
-				<div>
-					<label htmlFor="date">date:</label>
-					<div className="w-64">
-						<CalenderInput setCurrentDate={handleCalender} />
+			<>
+				<p className={`text-red-500 text-base capitalize text-center ${message.value && 'border-2 p-2 bg-red-200 my-4'} `}>{message.value}</p>
+				
+				<form onSubmit={handleSubmit} className={`${message.type === "error" ? "border-red-800 border-2": ""}`}>
+					<div className="flex flex-col gap-2 p-2 pt-8">
+						<div className="flex">
+							<label htmlFor="hairStyleId" className="text-lg capitalize w-20">style:</label>
+							<select
+								onChange={handlehairStyle}
+								id="hairStyleId"
+								value={formData.hairStyleId}
+								className="w-full capitalize py-1"
+							>
+								<option value="">Select...</option>
+								{hairStyleDropDown}
+							</select>
+						</div>
+						<div className="flex">
+							<span className="text-lg capitalize w-20">price:</span>
+							<span className="border-2 border-blue-4 px-2 w-full py-1">
+								{getHairStylePrice(formData.hairStyleId)?.price}
+							</span>
+						</div>
+						<div className="flex flex-col gap-1">
+							<span className="text-lg capitalize w-20">date:</span>
+							<div className="">
+								<CalenderInput setCurrentDate={handleCalender} formData={formData}/>
+							</div>
+						</div>
+						<div className="flex flex-col gap-1">
+							<span className="text-lg capitalize w-20">time:</span>
+							<TimeInput timeData={timeData} handleTime={handleTime} formData={formData}/>
+						</div>
 					</div>
-				</div>
-				<div>
-					<label htmlFor="time">time:</label>
-					<TimeInput timeData={timeData} handleTime={handleTime} />
-				</div>
-				<button>confirm</button>
-				{fetchError && <p className="text-red-300">{fetchError}</p>}
-			</form>
+					<button className={` text-white-2  mx-auto flex items-center justify-center p-2 px-4 ${message.type === "error" ? "animate-shake bg-red-600 text-white": "bg-blue-4"}`}>confirm</button>
+				</form>
+			</>
 		);
 	}
 	return <>{content}</>;

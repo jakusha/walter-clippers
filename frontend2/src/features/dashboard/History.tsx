@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ShowMore from "../../components/ShowMore";
 import {
 	HairStyle,
@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
-
+import scissors from "../../assets/scissors.png"
 
 interface  currentAppointmentDate {
 		date: string;
@@ -39,6 +39,22 @@ const History = () => {
 			(style:HairStyle) => style.hairStyleId === currentAppointmentDate?.hairStyleId
 		)?.name;
 	}
+
+	useEffect(() => {
+		if (appointmentInfoModal  ) {
+			document.body.style.position = "fixed";
+			document.body.style.top = `-${window.scrollY}px`;
+			document.body.style.left = "0px"
+			document.body.style.right = "0px"
+		}
+
+		return () => {
+			const scrollY = document.body.style.top;
+			document.body.style.position = "";
+			document.body.style.top = "";
+			window.scrollTo(0, parseInt(scrollY || "0") * -1);
+		};
+	}, [appointmentInfoModal]);
 	
 
 
@@ -49,65 +65,87 @@ const History = () => {
 		content = <div>loading.....</div>;
 	} else if (data) {
 		const transformedData = data.map((item:any) => (
-			<div key={uuidv4()}>
-				{item.date}
-				{
+			<div key={uuidv4()} className="py-4 p-2 flex items-center gap-4 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]  capitalize h-16 ">
+				<span>{item.date}</span>
+				<span>{
 					hairStyleData?.hairStyles?.find(
 						(style:HairStyle) => style?.hairStyleId === item?.hairStyleId
 					)?.name
-				}
+				}</span>
 				<span
 					onClick={() => {
 						setCurrentAppointmentDate(item);
 						setAppointmentInfoModal(true);
 					}}
+					className='text-blue-1 cursor-pointer ml-auto'
 				>
 					details
 				</span>
 			</div>
 		));
-		content = <ShowMore data={transformedData} />;
+		if(transformedData.length < 1) {
+		content = <div className="text-center text-xl font-semibolds">You currently dont have any appointment history ;) </div>
+		}else {
+
+			content = <ShowMore data={transformedData} />;
+		}
 	}
 
 	return (
 		<div>
-			<div>
+		<nav className="flex justify-between  border-b-2 border-blue-4 items-center px-2 md:px-14 overflow-hidden  w-full">
 				{" "}
-				<Link to={"/dashboard"}>Dashboard</Link>
+				<Link to={"/dashboard"}>
+				<span className="capitalize text-2xl cursor-pointer  flex items-center">
+					walter
+					<img
+						src={scissors}
+						alt="image of scissors"
+						className="pt-2 h-14 w-14"
+					/>
+				</span>
+				</Link>
+				<div className="flex gap-4 text-lg capitalize text-blue-3">
+					<Link to={"/dashboard"}>dashboard</Link>
+					
+				</div>
+			</nav>
+			<h2 className=" text-center capitalize text-xl md:text-2xl lg:text-3xl font-semibold pt-10 mb-5">Appointment History</h2>
+			<div className="w-3/4 max-w-lg mx-auto">
+				{content}
 			</div>
-			<h2 className=" text-center capitalize">Appointment History</h2>
-			{content}
 			{appointmentInfoModal &&
 				createPortal(
-					<div className="bg-transparent border-2 border-red-300 absolute top-0 left-0 right-0 h-screen w-screen py-10">
-						<div className="bg-white">
-							<div className="flex justify-between">
-								<div className="basis-1/4"></div>
-								<h3 className="basis-3/6 border-2 text-center capitalize">
-									appointment info
-								</h3>
-								<button
-									onClick={() =>
-										setAppointmentInfoModal(false)
-									}
-									className="basis-1/4"
-								>
-									close modal
-								</button>
-							</div>
-							<div>
-								<div>
-									<span>style: </span><span>{style}</span>
+					<div className="bg-[rgba(0,0,0,.2)] border-2 absolute top-0 left-0 right-0 h-screen w-screen p-4 py-6 z-40">
+						<div className="bg-slate-50 relative z-10 p-2 sm:w-4/6 mx-auto md:max-w-lg">
+						<div >
+
+					<h3 className="basis-3/6 capitalize text-xl lg:text-2xl text-center pt-10">
+						appointment info
+					</h3>
+					<button
+						onClick={() => setAppointmentInfoModal(false)}
+						className="basis-1/4 p-1 absolute top-0 right-0"
+					>
+						<svg xmlns="http://www.w3.org/2000/svg" className="ionicon w-10 h-10 text-red-400" viewBox="0 0 512 512"><title>Close</title><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368L144 144M368 144L144 368"/></svg>
+					</button>
+				</div>
+							<div className="p-4 capitalize">
+							<div className="flex">
+						<span className="text-lg  w-20">style:</span>
+						<span className=" ">{style}</span>
+					</div>
+					<div className="flex">
+						<span className="text-lg  w-20">price:</span>
+						<span className="">{price}</span>
+					</div>
+					<div className="flex">
+						<span className="text-lg  w-20">date:</span>
+						<span className="">{currentAppointmentDate?.date}</span>
 								</div>
-								<div>
-								<span>price: </span><span>{price}</span></div>
-								<div>
-									date:
-									{currentAppointmentDate?.date}
-								</div>
-								<div>
-									time:{" "}
-									{currentAppointmentDate?.time?.slice(0, 5)}
+								<div className="flex">
+						<span className="text-lg  w-20">time:</span>
+									<span>{currentAppointmentDate?.time?.slice(0, 5)}</span>
 								</div>
 							</div>
 						</div>

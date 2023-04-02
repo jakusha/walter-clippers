@@ -22,9 +22,9 @@ const DetermineDashboard = () => {
 		decodedToken = jwt_decode<JwtPayload>(token) as Auth
 		console.log(decodedToken?.roles,decodedToken?.roles?.includes(4848), "decoded")
 		if(decodedToken?.roles?.includes(4848)) {
-			content = <AdminDashboard />
-		}else {
 			content = <Dashboard />
+		}else {
+			content = <AdminDashboard />
 		}
 	}
 

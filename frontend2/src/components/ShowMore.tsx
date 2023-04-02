@@ -12,12 +12,12 @@ const ShowMore = ({ data }: {data: unknown[]}) => {
 	}
 
 	return (
-		<div className="grid place-content-center">
+		<div className="flex flex-col gap-4 auto-rows-max xl:grid-cols-2 row-auto gap-2 mb-10 lg:text-lg w-">
 			<div>{content}</div>
 			<button
 				onClick={handleClick}
 				disabled={count === showMoreLimit}
-				className="border-2 bg-blue-700 text-white p-4 rounded-md"
+				className="bg-blue-4 text-white p-4 inline-block w-40 mx-auto"
 			>
 				show more
 			</button>

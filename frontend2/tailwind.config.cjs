@@ -8,6 +8,17 @@ module.exports = {
 			fontFamily: {
 				istok: ["Istok Web", "sans-serif"],
 				nunito: ["Nunito", "sans-serif"],
+				montserrat: ["Montserrat", "sans-serif"],
+			},
+			colors: {
+				"blue-1": "#1E3A8A",
+				"blue-2": "#3B82F6",
+				"blue-3": "#1D4ED8",
+				"blue-4": "#07051C",
+				"white-1": "#FFFFFF",
+				"white-2": "#F7FAFC",
+				"white-3": "#F5F5F5",
+				"green-1": "#29DEF1",
 			},
 			animation: {
 				"header-intro": "header 4s both",
@@ -17,6 +28,7 @@ module.exports = {
 				slideUp: "slideUp 1s cubic-bezier(0.5, 0, 0.5, 1) 1.5s",
 				slideUpText: "slideUpText 0.7s cubic-bezier(0.5, 0, 0.5, 1)",
 				slideUpButton: "slideUpButton 4s cubic-bezier(0.5, 0, 0.5, 1)",
+				shake: "shake 2s cubic-bezier(0.5, 0, 0.5, 1) 2",
 			},
 			keyframes: {
 				header: {
@@ -48,6 +60,17 @@ module.exports = {
 				slideUpButton: {
 					"from, 70%": { opacity: "0", transform: "translateY(70%)" },
 					to: { opacity: "1", transform: "none" },
+				},
+				shake: {
+					" 20%,40%,60%, 80%": {
+						transform: "translateX(2%)",
+					},
+					"10%,30%,50%,70%,90%": {
+						transform: "translateX(-2%)",
+					},
+					"from , to": {
+						transform: "none",
+					},
 				},
 			},
 		},

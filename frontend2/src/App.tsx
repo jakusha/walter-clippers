@@ -2,13 +2,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./components/HomePage";
 import Login from "./features/auth/Login";
 import NoMatch from "./components/NoMatch";
-import Signup from "./components/Signup";
 import Dashboard from "./features/dashboard/Dashboard";
 import RequireAuth from "./components/RequireAuth";
 import PersistLogin from "./components/PersistLogin";
 import History from "./features/dashboard/History";
 import DetermineDashboard from "./features/dashboard/DetermineDashboard";
 import HairStyle from "./features/dashboard/HairStyle";
+import SignUp from "./features/auth/SignUp";
 
 function App() {
 	return (
@@ -16,7 +16,8 @@ function App() {
 			<Routes>
 				<Route index element={<HomePage />} />
 				<Route path="/login" element={<Login />} />
-				<Route path="/signup" element={<Signup />} />
+				
+				<Route path="/signup" element={<SignUp />} />
 				<Route
 					path="/dashboard"
 					element={
@@ -41,7 +42,7 @@ function App() {
 					path="/hairstyle"
 					element={
 						<PersistLogin>
-							<RequireAuth allowedRoles={[4848]}>
+							<RequireAuth allowedRoles={[3232]}>
 								<HairStyle />
 							</RequireAuth>
 						</PersistLogin>

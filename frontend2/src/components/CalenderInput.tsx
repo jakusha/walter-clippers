@@ -7,7 +7,16 @@ import { useSelector } from "react-redux";
 const currentYear = getCurrentYear();
 const currentMonth = getCurrentMonth();
 
-const CalenderInput = ({ setCurrentDate }: {setCurrentDate: (date:string)=> void}) => {
+
+
+interface FormDataState {
+	hairStyleId: string;
+	date: string;
+	time: string;
+	appointmentId?: string;
+}
+
+const CalenderInput = ({ setCurrentDate, formData  }: {setCurrentDate: (date:string)=> void, formData: FormDataState}) => {
 	const customer = useSelector(selectAuthCustomer);
 	const [yearInput, setYearInput] = useState(() => currentYear);
 	const [monthInput, setMonthInput] = useState(() => currentMonth);
@@ -25,13 +34,21 @@ const CalenderInput = ({ setCurrentDate }: {setCurrentDate: (date:string)=> void
 		}
 	}, [yearInput, monthInput, generateCalender, customer?.custId]);
 
+	function activeData (value:any, formData:FormDataState) {
+		if(!formData || !value) return;
+		const date = value?.date;
+		let splitDate = date.split("-");
+		splitDate[1] = parseInt(splitDate[1]) + 1;
+		let updatedDate = splitDate.join("-")
+		return new Date(updatedDate).toLocaleDateString() === new Date(formData.date).toLocaleDateString()
+	}
 	let calenderContent = data?.calender?.map((value:any) => (
 		<div
 			className={`border-2 border-red-100 p-4 grid place-content-center ${
 				value.invalid
 					? "opacity-25 cursor-not-allowed"
 					: "cursor-pointer "
-			}`}
+			}  ${activeData(value, formData) && "bg-blue-4 text-white"}`}
 			key={uuidv4()}
 			onClick={() => {
 				// console.log(value, "DATE IN CALENDERRR VALUESS!!!!!!!!!!1");
@@ -77,6 +94,9 @@ const CalenderInput = ({ setCurrentDate }: {setCurrentDate: (date:string)=> void
 		let result =
 			new Date(yearInput, monthInput) <=
 			new Date(currentYear, currentMonth);
+
+		console.log(new Date(yearInput, monthInput),
+		new Date(currentYear, currentMonth), "date values")
 		return result;
 	}
 
@@ -118,19 +138,21 @@ const CalenderInput = ({ setCurrentDate }: {setCurrentDate: (date:string)=> void
 		setMonthInput(Number(e.target.value));
 	}
 
+	console.log(validPrevious(), "IS month valid")
+
 	return (
 		<div>
-			<div className="  border-red-500 border-8 flex-1">
+			<div className="  flex-1">
 				<div className="flex justify-between px-4">
-					<button
-						className="bg-blue-100 p-2"
+					<div
+						className={`p-2 -ml-4 ${validPrevious() ? "hidden": "block"}`}
 						onClick={() => previous(monthInput)}
-						disabled={validPrevious()}
+						
 					>
-						left
-					</button>
+						<svg xmlns="http://www.w3.org/2000/svg" className="ionicon w-6 h-6" viewBox="0 0 512 512"><title>Chevron Back</title><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M328 112L184 256l144 144"/></svg>
+					</div>
 
-					<h3 className="text-lg">
+					<h3 className="text-lg flex gap-2 mx-1">
 						<select value={monthInput} onChange={handleMonthChange}>
 							{generateMonthDropdown()}
 						</select>
@@ -144,34 +166,34 @@ const CalenderInput = ({ setCurrentDate }: {setCurrentDate: (date:string)=> void
 
 						<div></div>
 					</h3>
-					<button
-						className="bg-blue-100 p-2"
+					<div
+						className="p-2 "
 						onClick={() => next(monthInput)}
 					>
-						right
-					</button>
+						<svg xmlns="http://www.w3.org/2000/svg" className="ionicon w-6 h-6" viewBox="0 0 512 512"><title>Chevron Forward</title><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M184 112l144 144-144 144"/></svg>
+					</div>
 				</div>
-				<div className="border-2 border-blue-300 grid grid-cols-7 grid-rows-6">
-					<div className="border-2 border-red-100 p-4 grid place-content-center">
-						Sun
+				<div className="border-2 border-blue-4 grid grid-cols-7 grid-rows-6">
+				<div className="py-2 grid place-content-center font-semibold">
+						Su
 					</div>
-					<div className="border-2 border-red-100 p-4 grid place-content-center">
-						Mon
+					<div className="py-2 grid place-content-center font-semibold">
+						Mo
 					</div>
-					<div className="border-2 border-red-100 p-4 grid place-content-center">
-						Tue
+					<div className="py-2 grid place-content-center font-semibold">
+						Tu
 					</div>
-					<div className="border-2 border-red-100 p-4 grid place-content-center">
-						Wed
+					<div className="py-2 grid place-content-center font-semibold">
+						We
 					</div>
-					<div className="border-2 border-red-100 p-4 grid place-content-center">
-						Thurs
+					<div className="py-2 grid place-content-center font-semibold">
+						Th
 					</div>
-					<div className="border-2 border-red-100 p-4 grid place-content-center">
-						Fri
+					<div className="py-2 grid place-content-center font-semibold">
+						Fr
 					</div>
-					<div className="border-2 border-red-100 p-4 grid place-content-center">
-						Sat
+					<div className="py-2 grid place-content-center font-semibold">
+						Sa
 					</div>
 					{calenderContent}
 				</div>

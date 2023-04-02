@@ -12,4 +12,4 @@ export const schema = Joi.object({
 		"string.empty": `hairStyleId cannot be an empty`,
 		"any.required": `hairStyleId is a required field`,
 	}),
-}).options({ abortEarly: false });
+}).options({ abortEarly: true });

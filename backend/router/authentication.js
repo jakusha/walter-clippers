@@ -11,6 +11,6 @@ const api = express.Router();
 api.post("/login/", handleLogin);
 api.post("/signup", handleCreateCustomer);
 api.get("/logout/", handleLogout);
-api.get("/refresh/", verifyJwt, handleRefreshToken);
+api.get("/refresh/", handleRefreshToken);
 
 module.exports = api;
