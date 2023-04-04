@@ -32,7 +32,7 @@ async function handleLogin(req, res) {
 		//sign jwt tokn
 		const rolesResult = userRoles.map((customer) => customer.roleId);
 
-		console.log(rolesResult, "USERS ROLES");
+		// console.log(rolesResult, "USERS ROLES");
 		const accessToken = jwt.sign(
 			{
 				username: foundCustomer.username,
@@ -43,7 +43,7 @@ async function handleLogin(req, res) {
 			{ expiresIn: "3h" }
 		);
 
-		console.log(accessToken, "ACCCESSS TOKKKEENN !!!!!!!!!!!!!!!11");
+		// console.log(accessToken, "ACCCESSS TOKKKEENN !!!!!!!!!!!!!!!11");
 		const refreshToken = jwt.sign(
 			{
 				username: foundCustomer.username,
@@ -101,10 +101,10 @@ async function handleLogout(req, res) {
 }
 
 async function handleRefreshToken(req, res) {
-	console.log(req, "REQUeKSDF!!!!!!!!!");
+	// console.log(req, "REQUeKSDF!!!!!!!!!");
 	const cookies = req.cookies;
 
-	console.log(cookies, "COOKIIEESSSS!!!!!!");
+	// console.log(cookies, "COOKIIEESSSS!!!!!!");
 	if (!cookies?.jwt) return res.sendStatus(401);
 
 	const refreshToken = cookies.jwt;

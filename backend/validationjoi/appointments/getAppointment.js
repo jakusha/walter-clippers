@@ -1,6 +1,4 @@
 const Joi = require("joi");
-const { DateTime } = require("luxon");
-// console.log(DateTime.now().toISO());
 
 module.exports = Joi.object({
 	date: Joi.date().iso().required().messages({

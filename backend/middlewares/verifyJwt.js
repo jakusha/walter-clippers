@@ -11,7 +11,7 @@ function verifyJwt(req, res, next) {
 		req.roles = decoded.roles;
 		req.email = decoded.email;
 
-		console.log(decoded.roles, "DECODED CUSTOMER ROLE!!!");
+		// console.log(decoded.roles, "DECODED CUSTOMER ROLE!!!");
 		if (decoded.roles.includes(4848)) {
 			req.user = "customer";
 		} else {

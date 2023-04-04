@@ -137,7 +137,7 @@ async function handleGenerateCalenderModal(req, res) {
 					custId: custId,
 				},
 			});
-			console.log(result, "RESULT FROM APPOINTMENT!!!!!!11");
+			// console.log(result, "RESULT FROM APPOINTMENT!!!!!!11");
 
 			const dateToAppointment = {};
 

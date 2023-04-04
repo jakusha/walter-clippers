@@ -85,13 +85,13 @@ async function handleCreateAppointMent(req, res) {
 				custId,
 			});
 
-			console.log(
-				result,
-				result.appointmentId,
-				req.body.payment.reference,
-				result.appointmentId,
-				"APPOINTMENT CREATION"
-			);
+			// console.log(
+			// 	result,
+			// 	result.appointmentId,
+			// 	req.body.payment.reference,
+			// 	result.appointmentId,
+			// 	"APPOINTMENT CREATION"
+			// );
 			let transaction = "transactions";
 			if (result) {
 				transaction = await Transactions.create({

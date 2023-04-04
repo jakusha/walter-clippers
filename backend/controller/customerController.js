@@ -14,11 +14,11 @@ async function handleGetAllCustomers(req, res) {
 async function handleGetCustomer(req, res) {
 	const cookies = req.cookies;
 
-	console.log(cookies, "COOKIIEESSSS!!!!!!");
+	// console.log(cookies, "COOKIIEESSSS!!!!!!");
 	if (!cookies?.jwt) return res.sendStatus(401);
 
 	const refreshToken = cookies.jwt;
-	console.log(refreshToken, "REFRESHH TOKKEENNNN");
+	// console.log(refreshToken, "REFRESHH TOKKEENNNN");
 
 	try {
 		const customers = await Customer.findOne({
@@ -107,7 +107,7 @@ async function handleUpdateCustomer(req, res) {
 				},
 			});
 
-			console.log(foundCustomer);
+			// console.log(foundCustomer);
 
 			if (foundCustomer)
 				return res
@@ -141,7 +141,7 @@ async function handleDeleteCustomer(req, res) {
 	try {
 		const result = await Customer.findByPk(custId);
 
-		console.log(result);
+		// console.log(result);
 		if (result) {
 			await Customer.destroy({
 				where: {

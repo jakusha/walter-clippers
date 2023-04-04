@@ -22,7 +22,7 @@ async function main(subject, htmlContent, mail) {
 			html: htmlContent, // html body
 		});
 
-		console.log("Message sent: %s", info.messageId);
+		// console.log("Message sent: %s", info.messageId);
 	} catch (error) {
 		console.log(error);
 	}

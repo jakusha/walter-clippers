@@ -20,10 +20,10 @@ async function handleCreateHairStyle(req, res) {
 	}
 	try {
 		const newHairStyle = await HairStyle.create({ ...value });
-		console.log(newHairStyle);
+		// console.log(newHairStyle);
 		return res.json({ newHairStyle });
 	} catch (error) {
-		console.log(error, "an error occureddd--------!!!!!", error.message);
+		// console.log(error, "an error occureddd--------!!!!!", error.message);
 		return res.status(500).json({ error: error.message });
 	}
 }
@@ -107,7 +107,7 @@ async function handleUpdateHairStyle(req, res) {
 
 		return res.json({ message: "hairstyle successfully updated" });
 	} catch (error) {
-		console.log(error, "an error occureddd--------!!!!!", error.message);
+		// console.log(error, "an error occureddd--------!!!!!", error.message);
 		return res.status(500).json({ error: error.message });
 	}
 }
