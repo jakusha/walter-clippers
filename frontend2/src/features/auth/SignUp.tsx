@@ -49,7 +49,7 @@ const SignUp = () => {
 		if (error) {
 			setMessage({ type: "error", value: error.message });
 		} else {
-			console.log("sumitedd redirecting");
+			// console.log("sumitedd redirecting");
 
 			try {
 				await signup({ ...value }).unwrap();

@@ -56,7 +56,7 @@ const Dashboard = () => {
 	const [currentAppointmentDate, setCurrentAppointmentDate] = useState(
 		{} as CurrentAppointmentDate
 	);
-	console.log(currentAppointmentDate, "");
+	// console.log(currentAppointmentDate, "");
 
 	const [
 		generateCalender,
@@ -67,17 +67,17 @@ const Dashboard = () => {
 		},
 	] = useLazyGenerateCalenderQuery();
 
-	console.log(calenderData, "CALENDER DATA!!!!!!1");
+	// console.log(calenderData, "CALENDER DATA!!!!!!1");
 
 	async function handleLogout() {
 		try {
 			//passing this placeholder string to make linter shutup
 			await logout("asd");
-			console.log("LOGGED OUTT OOO");
+			// console.log("LOGGED OUTT OOO");
 			dispatch(logOut());
 			navigate("/");
 		} catch (error) {
-			console.log(error, "ERROORRR IN DASHBOARD");
+			console.error(error);
 		}
 	}
 
@@ -130,7 +130,7 @@ const Dashboard = () => {
 	}
 
 	return (
-		<div className="relative max-w-screen-2xl mx-auto">
+		<div className="relative max-w-screen-2xl mx-auto ">
 			<nav className="flex justify-between  border-b-2 border-blue-4 items-center px-2 md:px-14 overflow-hidden  w-full">
 				{" "}
 				<span className="capitalize text-2xl cursor-pointer  flex items-center">
@@ -201,7 +201,7 @@ const Dashboard = () => {
 			</div>
 			{showModal &&
 				createPortal(
-					<div className="bg-[rgba(0,0,0,.2)] border-2 border-red-300 absolute top-0 left-0 right-0 h-screen w-screen p-4 py-6 z-20">
+					<div className="bg-[rgba(0,0,0,.2)] border-2 border-red-300 absolute top-0 left-0 right-0 h-screen w-screen p-4 py-6 z-20 animate-modal">
 						<div className="h-[90vh] sm:w-4/6 mx-auto md:max-w-lg">
 							<div className="bg-slate-50 relative z-10 h-full overflow-y-scroll p-2">
 								<div>
@@ -246,7 +246,7 @@ const Dashboard = () => {
 				)}
 			{appointmentInfoModal &&
 				createPortal(
-					<div className="bg-[rgba(0,0,0,.2)] border-2 absolute top-0 left-0 right-0 h-screen w-screen p-4 py-6 z-40">
+					<div className="bg-[rgba(0,0,0,.2)] border-2 absolute top-0 left-0 right-0 h-screen w-screen p-4 py-6 z-40 animate-modal">
 						<AppointmentInfo
 							currentAppointmentDate={currentAppointmentDate}
 							hairStyle={hairStyleData?.hairStyles}

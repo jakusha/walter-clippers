@@ -20,7 +20,7 @@ interface FormDataState {
 
 const TimeInput = ({ timeData, handleTime, formData }:TimeInputProp) => {
 	
-	console.log(formData, 'FROM DATA IN TIME INPUT')
+	// console.log(formData, 'FROM DATA IN TIME INPUT')
 	let timeContent =
 		timeData &&
 		Object.entries(timeData?.times).map((time: string[]) => (

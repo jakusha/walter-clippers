@@ -6,10 +6,10 @@ const hairStyleSlice = createSlice({
 	initialState: { hairStyle: [] },
 	reducers: {
 		setHairStyles: (state, action) => {
-			console.log(
-				action.payload,
-				"DATA FROM APPOINTMENT SLICE!!!!!!!!!11"
-			);
+			// console.log(
+			// 	action.payload,
+			// 	"DATA FROM APPOINTMENT SLICE!!!!!!!!!11"
+			// );
 			const { hairStyles } = action.payload;
 			state.hairStyle = hairStyles;
 		},

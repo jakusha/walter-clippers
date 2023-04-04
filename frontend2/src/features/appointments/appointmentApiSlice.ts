@@ -23,12 +23,12 @@ export const appointmentApiSlice = apiSlice.injectEndpoints({
 
 			query: (customerid) => `/appointment/customer/${customerid}`,
 			transformResponse: (response: Response) => {
-				console.log(response, "TRANSFORMED RESPONSE!!!!!!!!!!!11");
+				// console.log(response, "TRANSFORMED RESPONSE!!!!!!!!!!!11");
 				const sorted = response.result.sort(
 					(a:Result, b:Result) =>
 						a.date - b.date && parseInt(a.time) - parseInt(b.time)
 				);
-				console.log(sorted, "SORTED TRANSFORMED RESPONSE!!!!!!!!!!!11");
+				// console.log(sorted, "SORTED TRANSFORMED RESPONSE!!!!!!!!!!!11");
 
 				return sorted;
 			},
@@ -91,7 +91,7 @@ export const appointmentApiSlice = apiSlice.injectEndpoints({
 				};
 			},
 			transformResponse: (response) => {
-				console.log(response, "response data !!!!1 from request");
+				// console.log(response, "response data !!!!1 from request");
 				return response;
 			},
 			invalidatesTags: ["Appointment"]

@@ -34,7 +34,7 @@ const AppointmentInfo = ({
 	hairStyle,
 	currentAppointmentDate,
 }:AppointmentInfoProps) => {
-	console.log(currentAppointmentDate, "Current Appointment!!!!!")
+	// console.log(currentAppointmentDate, "Current Appointment!!!!!")
 	const price = hairStyle?.find(
 		(style:HairStyle) =>
 			style?.hairStyleId ===
@@ -56,7 +56,7 @@ const AppointmentInfo = ({
 			if (result.message) {
 				setFetchSuccess(result.message);
 			}
-			console.log(result, "RESULT FROM DELETING!!!!!!");
+			// console.log(result, "RESULT FROM DELETING!!!!!!");
 		} catch (error) {
 			console.error(error);
 		}
@@ -183,9 +183,9 @@ const AppointmentInfo = ({
 		);
 	}
 	return (
-		<>
+		<div>
 			{content}
-		</>
+		</div>
 	);
 };
 

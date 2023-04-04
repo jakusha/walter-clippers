@@ -33,7 +33,7 @@ const AdminAppointmentInfo = ({
 	hairStyle,
 	currentAppointmentDate,
 }: AppointmentInfoProps) => {
-	console.log(currentAppointmentDate, hairStyle, "Current Appointment!!!!!");
+	// console.log(currentAppointmentDate, hairStyle, "Current Appointment!!!!!");
 	const price = hairStyle?.find(
 		(style: HairStyle) =>
 			style?.hairStyleId ===
@@ -55,7 +55,7 @@ const AdminAppointmentInfo = ({
 			if (result.message) {
 				setFetchSuccess(result.message);
 			}
-			console.log(result, "RESULT FROM DELETING!!!!!!");
+			// console.log(result, "RESULT FROM DELETING!!!!!!");
 		} catch (error) {
 			console.error(error);
 		}
@@ -116,7 +116,7 @@ const AdminAppointmentInfo = ({
 				<h2>{fetchSuccess}</h2>
 				<button
 					onClick={() => {
-						console.log("closing");
+						// console.log("closing");
 						setDeleteModal(false);
 						setAppointmentInfoModal(false);
 					}}

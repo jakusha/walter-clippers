@@ -58,7 +58,7 @@ const AdminDashboard = () => {
 	const [currentAppointmentDate, setCurrentAppointmentDate] = useState(
 		{} as CurrentAppointmentDate
 	);
-	console.log(currentAppointmentDate, "");
+	// console.log(currentAppointmentDate, "");
 
 	useEffect(() => {
 		if (appointmentInfoModal) {
@@ -83,23 +83,21 @@ const AdminDashboard = () => {
 		},
 	] = useLazyGenerateCalenderQuery();
 
-	console.log(calenderData, "CALENDER DATA!!!!!!1");
+	// console.log(calenderData, "CALENDER DATA!!!!!!1");
 
 	async function handleLogout() {
 		try {
 			//passing this placeholder string to make linter shutup
 			await logout("asd");
-			console.log("LOGGED OUTT OOO");
+			// console.log("LOGGED OUTT OOO");
 			dispatch(logOut());
 			navigate("/");
 		} catch (error) {
-			console.log(error, "ERROORRR IN DASHBOARD");
+			console.log(error);
 		}
 	}
 
-	useEffect(() => {
-		console.log(currentAppointmentDate, "CUrrent Appintment date!!!!!!11");
-	}, [currentAppointmentDate]);
+	
 	let content = <div>An error occured</div>;
 
 	if (calenderIsLoading) {

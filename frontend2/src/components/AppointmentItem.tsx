@@ -45,7 +45,7 @@ const AppointmentItem = ({
 			<span>{appointment?.date} {style} </span>{" "}
 			<span
 				onClick={() => {
-					console.log(appointment);
+					// console.log(appointment);
 					let data:any = appointment 
 					setCurrentAppointmentDate({appointmentInfo: [{...data}]});
 					setAppointmentInfoModal(true);

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import {
 	useCreateNewAppointmentMutation,
 	useUpdateAppointmentMutation,
@@ -14,7 +14,7 @@ import { DateTime } from "luxon";
 import { schema } from "../../joiValidations/createAppointment";
 import { selectAuthCustomer } from "../auth/authSlice";
 import confetti from "../../assets/Confetti.png"
-
+import {usePaystackPayment, PaystackButton} from "react-paystack"
 interface AppointmentFormProp {
     currentDate?: string;
     previosData?: null | FormDataState;
@@ -33,9 +33,19 @@ interface Message {
 	value: string;
 }
 
-const AppointmentForm = ({ currentDate, previosData = null }: AppointmentFormProp) => {
-	const customer = useSelector(selectAuthCustomer);
 
+const AppointmentForm = ({ currentDate, previosData = null }: AppointmentFormProp) => {
+	const [config, setConfig] = useState({})
+	const customer = useSelector(selectAuthCustomer);
+	const initializePayment = usePaystackPayment({
+		
+			reference: (new Date()).getTime().toString(),
+			email: "aaronebube123@gmail.com",
+			amount: 20000, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
+			publicKey: 'pk_test_a828faee19c13415169bd229e73b3d1b89dd4c3a',
+		
+	})
+	
 	const [formData, setFormData] = useState<FormDataState>(():FormDataState => {
 		if (previosData) {
 			return {
@@ -54,15 +64,16 @@ const AppointmentForm = ({ currentDate, previosData = null }: AppointmentFormPro
 	
 	const {data:hairData} = useGetAllHairStylesQuery();
 
-	console.log(hairData, "HAIR DATA");
+	// console.log(hairData, "HAIR DATA");
 	const [createNewAppointment] = useCreateNewAppointmentMutation();
 	const [updateAppointment] = useUpdateAppointmentMutation();
 	const [message, setMessage] = useState<Message>({type: "normal", value: ""})
 	const [fetchSuccess, setFetchSuccess] = useState();
 	const [previousDate, setPreviousDate] = useState("");
+	const [validForm, setValidForm] = useState(null)
 
 	useEffect(() => {
-		console.log("rendering here!!!!!11")
+		// console.log("rendering here!!!!!11")
 		const dateObj = new Date(formData?.date);
 		const newDate = DateTime.fromJSDate(dateObj).toISODate();
 		if(previousDate !== newDate) {
@@ -88,8 +99,8 @@ const AppointmentForm = ({ currentDate, previosData = null }: AppointmentFormPro
 
 
 	function getHairStylePrice(hairId: string):null|HairStyle {
-		console.log(hairId, "HAIR ID INFOOO!!!!!!!!!!!!!1");
-		console.log(hairData);
+		// console.log(hairId, "HAIR ID INFOOO!!!!!!!!!!!!!1");
+		// console.log(hairData);
 		if (hairId) {
 			const result:any = hairData?.hairStyles?.find(
 				(hair:HairStyle) => hair.hairStyleId === hairId
@@ -124,10 +135,11 @@ const AppointmentForm = ({ currentDate, previosData = null }: AppointmentFormPro
 
 	async function handleSubmit(e: FormEvent<HTMLFormElement>) {
 		e.preventDefault();
-		console.log(formData, "DATA FROM FORM!!!!11");
+		// pk_test_a828faee19c13415169bd229e73b3d1b89dd4c3a
+		// console.log(formData, "DATA FROM FORM!!!!11");
 		const dateObj = new Date(formData.date);
 		const newDate = DateTime.fromJSDate(dateObj).toISODate();
-		console.log(newDate, "DATEEEEEE!!!!!!");
+		// console.log(newDate, "DATEEEEEE!!!!!!");
 		const { hairStyleId, time } = formData;
 		const { value, error } = schema.validate({
 			hairStyleId: hairStyleId.toString(),
@@ -135,18 +147,20 @@ const AppointmentForm = ({ currentDate, previosData = null }: AppointmentFormPro
 			date: newDate.toString(),
 		});
 
-		console.log(value, "VALUEESSSS!!!!!!!!!!");
+		
+		// console.log(value, "VALUEESSSS!!!!!!!!!!");
 
 		if (error) {
 			setMessage({type: "error", value: error.message})
-			console.log(error, "ERROR FROM VALIDATION!!!!!!!");
+			// console.log(error, "ERROR FROM VALIDATION!!!!!!!");
 		} else {
+			setValidForm(value);
 			try {
 				if (previosData) {
-					console.log(
-						value,
-						"UPDATEDATING APPOINTMENT APPOINTMENT!!!!!!!!1"
-					);
+					// console.log(
+					// 	value,
+					// 	"UPDATEDATING APPOINTMENT APPOINTMENT!!!!!!!!1"
+					// );
 					const result:any = await updateAppointment({
 						appointmentId: previosData.appointmentId,
 						body: { ...value, custId: customer?.custId },
@@ -158,34 +172,22 @@ const AppointmentForm = ({ currentDate, previosData = null }: AppointmentFormPro
 					} else {
 						setFetchSuccess(result?.message);
 					}
-					console.log(result, "RESULT FROM UPDATE")
-					console.log(
-						value,
-						result,
-						"UPDATING APPOINTMENT APPOINTMENT!!!!1111"
-					);
-				} else {
-					const result = await createNewAppointment({
-						custId: customer?.custId,
-						body: value,
-					}).unwrap();
-
-					if (result.error) {
-						setMessage(result.error);
-					} else {
-						setFetchSuccess(result.message);
-					}
-					console.log(result, "NEW APPOINTMENT!!!!1111");
+					// console.log(result, "RESULT FROM UPDATE")
+					// console.log(
+					// 	value,
+					// 	result,
+					// 	"UPDATING APPOINTMENT APPOINTMENT!!!!1111"
+					// );
 				}
 			} catch (error) {
-				console.log(error, "An ERror occured");
+				console.error(error, "An ERror occured");
 			}
 		}
-		console.log(value, error);
+		// console.log(value, error);
 	}
 
 	let content;
-	console.log(timeLoading, "TIME IS LOADING")
+	// console.log(timeLoading, "TIME IS LOADING")
 
 	if (fetchSuccess) {
 		//todo: success modal
@@ -195,6 +197,49 @@ const AppointmentForm = ({ currentDate, previosData = null }: AppointmentFormPro
 				<p className="text-xl capitalize">{fetchSuccess}</p>
 			</div>
 		);
+	}else if(validForm) {
+		let value = {
+			
+			email: customer?.email,
+			amount: getHairStylePrice(validForm.hairStyleId)?.price, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
+			publicKey: 'pk_test_a828faee19c13415169bd229e73b3d1b89dd4c3a',
+			text: "Pay now",
+			onSuccess:  (payment: any)=> {
+				// console.log({...validForm, payment},  "looking forward to seeeing you look good")
+				// console.log(payment,)
+
+				async function veifyPamentAppointment() {
+					try {
+						const result = await createNewAppointment({
+								custId: customer?.custId,
+								body: {...validForm, payment},
+							}).unwrap();
+		
+							if (result.error) {
+								setMessage(result.error);
+							} else {
+								setFetchSuccess(result.message);
+							}
+						// console.log(result, "NEW APPOINTMENT!!!!1111");
+					} catch (error) {
+						alert("an error occured")
+					}
+
+				}
+
+				veifyPamentAppointment()
+			},
+			onClose: ()=> {
+				console.log('closed')
+			}
+		}
+					  
+		// console.log(validForm)
+		
+		content = <div>
+			<h2>pay for haircut</h2>
+			<PaystackButton  {...value}/>
+		</div>
 	} else {
 		content = (
 			<>
@@ -214,9 +259,9 @@ const AppointmentForm = ({ currentDate, previosData = null }: AppointmentFormPro
 								{hairStyleDropDown}
 							</select>
 						</div>
-						<div className="flex">
+						<div className="flex ">
 							<span className="text-lg capitalize w-20">price:</span>
-							<span className="border-2 border-blue-4 px-2 w-full py-1">
+							<span className="border-2 border-blue-4 px-2 w-full py-1 cursor-not-allowed">
 								{getHairStylePrice(formData.hairStyleId)?.price}
 							</span>
 						</div>

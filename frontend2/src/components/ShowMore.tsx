@@ -14,13 +14,13 @@ const ShowMore = ({ data }: {data: unknown[]}) => {
 	return (
 		<div className="flex flex-col gap-4 auto-rows-max xl:grid-cols-2 row-auto gap-2 mb-10 lg:text-lg w-">
 			<div>{content}</div>
-			<button
+			{data.length >= 10 ? <button
 				onClick={handleClick}
 				disabled={count === showMoreLimit}
 				className="bg-blue-4 text-white p-4 inline-block w-40 mx-auto"
 			>
 				show more
-			</button>
+			</button>: null}
 		</div>
 	);
 };

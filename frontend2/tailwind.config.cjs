@@ -1,5 +1,3 @@
-const { transform } = require("typescript");
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
@@ -29,6 +27,7 @@ module.exports = {
 				slideUpText: "slideUpText 0.7s cubic-bezier(0.5, 0, 0.5, 1)",
 				slideUpButton: "slideUpButton 4s cubic-bezier(0.5, 0, 0.5, 1)",
 				shake: "shake 2s cubic-bezier(0.5, 0, 0.5, 1) 2",
+				modal: "modal 0.5s cubic-bezier(0.5, 0, 0.5, 1) both",
 			},
 			keyframes: {
 				header: {
@@ -71,6 +70,12 @@ module.exports = {
 					"from , to": {
 						transform: "none",
 					},
+				},
+				modal: {
+					from: {
+						opacity: "0",
+					},
+					to: { opacity: "1" },
 				},
 			},
 		},

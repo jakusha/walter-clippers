@@ -116,7 +116,7 @@ const History = () => {
 			</div>
 			{appointmentInfoModal &&
 				createPortal(
-					<div className="bg-[rgba(0,0,0,.2)] border-2 absolute top-0 left-0 right-0 h-screen w-screen p-4 py-6 z-40">
+					<div className="bg-[rgba(0,0,0,.2)] border-2 absolute top-0 left-0 right-0 h-screen w-screen p-4 py-6 z-40 animate-modal">
 						<div className="bg-slate-50 relative z-10 p-2 sm:w-4/6 mx-auto md:max-w-lg">
 						<div >
 

@@ -76,7 +76,7 @@ const HairStyle = () => {
 		e.preventDefault();
 		if (updating) {
 			try {
-				console.log(hairStyleValue, "hairstyle values");
+				// console.log(hairStyleValue, "hairstyle values");
 
 				const result: any = await updateHairStyle({
 					hairStyleId: hairStyleValue.hairStyleId as string,
@@ -85,7 +85,7 @@ const HairStyle = () => {
 						price: hairStyleValue.price,
 					},
 				});
-				console.log(result, "Updated successfully");
+				// console.log(result, "Updated successfully");
 
 				if (result.error) {
 					setErroMsg(result.error.data.message);
@@ -93,7 +93,7 @@ const HairStyle = () => {
 					setNewHairStyleModal(false);
 				}
 			} catch (error) {
-				console.log(error);
+				console.error(error);
 				setErroMsg("an error occured");
 			}
 		} else {
@@ -113,7 +113,7 @@ const HairStyle = () => {
 				setErroMsg("an error occured");
 			}
 		}
-		console.log(hairStyleValue, "SUBmiteed value");
+		// console.log(hairStyleValue, "SUBmiteed value");
 	}
 
 	let content;

@@ -40,8 +40,8 @@ const Calender = ({
 	const [yearInput, setYearInput] = useState(() => currentYear);
 	const [monthInput, setMonthInput] = useState(() => currentMonth);
 
-	console.log(isLoading, data, "CALENDER RESUKTSSS 111111111111");
-	console.log(data, "DATA VALUUUEEEE");
+	// console.log(isLoading, data, "CALENDER RESUKTSSS 111111111111");
+	// console.log(data, "DATA VALUUUEEEE");
 	const customer = useSelector(selectAuthCustomer);
 
 	let calenderContent;
@@ -58,7 +58,7 @@ const Calender = ({
 				} ${value.hasPassed && "text-[#cdcdcf]"} ${value.appointment  && value.hasPassed && "bg-green-200"} `}
 				key={uuidv4()}
 				onClick={() => {
-					console.log(value, "DATE IN CALENDERRR VALUESS!!!!!!!!!!1");
+					// console.log(value, "DATE IN CALENDERRR VALUESS!!!!!!!!!!1");
 					setCurrentAppointmentDate(value);
 					if (value.appointment) {
 						setAppointmentInfoModal(true);
@@ -98,8 +98,8 @@ const Calender = ({
 	}
 
 	function generateMonthDropdown() {
-		console.log(currentYear, yearInput, "YEARRR!!!!!");
-		console.log(months);
+		// console.log(currentYear, yearInput, "YEARRR!!!!!");
+		// console.log(months);
 
 		let filterUnusableMonth;
 		if (yearInput > currentYear) {
@@ -112,7 +112,7 @@ const Calender = ({
 			);
 		}
 
-		console.log(filterUnusableMonth);
+		// console.log(filterUnusableMonth);
 
 		const calanderDropDown = filterUnusableMonth.map((month) => (
 			<option value={month.num} key={uuidv4()}>

@@ -22,7 +22,7 @@ const CalenderInput = ({ setCurrentDate, formData  }: {setCurrentDate: (date:str
 	const [monthInput, setMonthInput] = useState(() => currentMonth);
 	const [generateCalender, { data, isLoading }] =
 		useGenerateCalenderModalMutation();
-	console.log(data, "CALENDER MAPPPP!!!!!!!!!11");
+	// console.log(data, "CALENDER MAPPPP!!!!!!!!!11");
 	useEffect(() => {
 		if(customer) {
 
@@ -95,14 +95,12 @@ const CalenderInput = ({ setCurrentDate, formData  }: {setCurrentDate: (date:str
 			new Date(yearInput, monthInput) <=
 			new Date(currentYear, currentMonth);
 
-		console.log(new Date(yearInput, monthInput),
-		new Date(currentYear, currentMonth), "date values")
 		return result;
 	}
 
 	function generateMonthDropdown() {
-		console.log(currentYear, yearInput, "YEARRR!!!!!");
-		console.log(months);
+		// console.log(currentYear, yearInput, "YEARRR!!!!!");
+		// console.log(months);
 
 		let filterUnusableMonth;
 		if (yearInput > currentYear) {
@@ -115,7 +113,7 @@ const CalenderInput = ({ setCurrentDate, formData  }: {setCurrentDate: (date:str
 			);
 		}
 
-		console.log(filterUnusableMonth);
+		// console.log(filterUnusableMonth);
 
 		const calanderDropDown = filterUnusableMonth.map((month) => (
 			<option value={month.num} key={uuidv4()}>
@@ -138,7 +136,7 @@ const CalenderInput = ({ setCurrentDate, formData  }: {setCurrentDate: (date:str
 		setMonthInput(Number(e.target.value));
 	}
 
-	console.log(validPrevious(), "IS month valid")
+	// console.log(validPrevious(), "IS month valid")
 
 	return (
 		<div>

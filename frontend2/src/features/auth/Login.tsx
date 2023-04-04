@@ -37,7 +37,7 @@ const Login = () => {
 
 		try {
 			const result = await login({ ...value }).unwrap();
-			console.log(result, "REsult from auth")
+			// console.log(result, "REsult from auth")
 			dispatch(setCredentials({ ...result }));
 			navigate("/dashboard");
 		} catch (error: any) {	

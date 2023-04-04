@@ -18,15 +18,15 @@ const PersistLogin = ({ children }: {children : ReactNode}) => {
 		async function refresh() {
 			try {
 				const result = await refreshToken("asd").unwrap();
-				console.log(result, "RESSuLLLL!!!!");
+				// console.log(result, "RESSuLLLL!!!!");
 				dispatch(setCredentials({ ...result }));
 				setRefreshStatus(true);
 			} catch (error) {
-				console.log(error);
+				// console.log(error);
 				setErrMsg(true);
 			}
 		}
-		console.log(token, "TOKENNNNN!!!!!");
+		// console.log(token, "TOKENNNNN!!!!!");
 		if (!token) {
 			refresh();
 		}

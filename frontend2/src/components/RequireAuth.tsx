@@ -23,9 +23,9 @@ const RequireAuth = ({ children, allowedRoles }: {children: ReactNode, allowedRo
 			
 			if(token && decodedToken.roles && allowedRoles){
 			const isAllowed = decodedToken.roles.find(role => allowedRoles?.includes(role));
-			console.log(isAllowed,isAllowed === undefined, decodedToken.roles, "Allowed")
+			// console.log(isAllowed,isAllowed === undefined, decodedToken.roles, "Allowed")
 			if (isAllowed === undefined ) {
-				console.log();
+				// console.log();
 				
 				content = <Navigate to="/dashboard"  replace />
 				
