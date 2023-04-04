@@ -38,7 +38,7 @@ app.use("/hairstyle", verifyJwt, hairStyleRouter);
 app.use("/auth", authRouter);
 app.use("/calender", verifyJwt, calenderRouter);
 
-const PORT = 3333;
+// const PORT = 3333;
 
 //connect to database and start server
 const startDb = async () => {
@@ -46,9 +46,9 @@ const startDb = async () => {
 		await db.authenticate();
 		await db.sync();
 		console.log("Connection has been established successfully.");
-		app.listen(PORT, () => {
-			console.log(`app listening at port ${PORT}`);
-		});
+		// app.listen(, () => {
+		// 	console.log(`app listening`);
+		// });
 		await Roles.findOrCreate({
 			where: {
 				role: "Admin",
