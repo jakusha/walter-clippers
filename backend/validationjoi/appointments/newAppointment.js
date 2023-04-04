@@ -14,6 +14,15 @@ module.exports = Joi.object({
 		"string.empty": `hairStyleId cannot be an empty`,
 		"any.required": `hairStyleId is a required field`,
 	}),
+	payment: Joi.object({
+		reference: Joi.string(),
+		trans: Joi.string(),
+		status: Joi.string(),
+		message: Joi.string(),
+		transaction: Joi.string(),
+		trxref: Joi.string(),
+		redirecturl: Joi.string(),
+	}),
 }).options({ abortEarly: false });
 
 // {

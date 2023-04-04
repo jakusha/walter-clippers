@@ -1,6 +1,7 @@
 //create an appointment using the customers id
 const { Op } = require("sequelize");
 const Appointment = require("../model/Appointment");
+const Transactions = require("../model/Transactions");
 const newAppointmentSchema = require("../validationjoi/appointments/newAppointment");
 const availableTimeSchema = require("../validationjoi/appointments/getAvailableAppointments");
 const { DateTime } = require("luxon");
@@ -84,6 +85,21 @@ async function handleCreateAppointMent(req, res) {
 				custId,
 			});
 
+			console.log(
+				result,
+				result.appointmentId,
+				req.body.payment.reference,
+				result.appointmentId,
+				"APPOINTMENT CREATION"
+			);
+			let transaction = "transactions";
+			if (result) {
+				transaction = await Transactions.create({
+					transactionId: req.body.payment.reference,
+					appointmentId: result.appointmentId,
+				});
+			}
+
 			const hairstyleInfo = await HairStyle.findByPk(value.hairStyleId);
 			emailFunction(
 				"New Haircut Appointment",
@@ -100,6 +116,7 @@ async function handleCreateAppointMent(req, res) {
 				result,
 				message: "successfully created anappointment",
 				hairstyleInfo,
+				transaction,
 			});
 		} else {
 			return res.status(400).json({ error: "invalid customer id" });

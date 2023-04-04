@@ -4,24 +4,28 @@ const fs = require("fs");
 const path = require("path");
 
 async function main(subject, htmlContent, mail) {
-	// create reusable transporter object using the default SMTP transport
-	const transporter = nodemailer.createTransport({
-		service: "yahoo",
-		auth: {
-			user: process.env.EMAIL,
-			pass: process.env.PASS,
-		},
-	});
+	try {
+		// create reusable transporter object using the default SMTP transport
+		const transporter = nodemailer.createTransport({
+			service: "yahoo",
+			auth: {
+				user: process.env.EMAIL,
+				pass: process.env.PASS,
+			},
+		});
 
-	// send mail with defined transport object
-	let info = await transporter.sendMail({
-		from: `"Walter Clippers ✂️" <${process.env.EMAIL}>`, // sender address
-		to: mail, // list of receivers
-		subject: subject, // Subject line
-		html: htmlContent, // html body
-	});
+		// send mail with defined transport object
+		let info = await transporter.sendMail({
+			from: `"Walter Clippers ✂️" <${process.env.EMAIL}>`, // sender address
+			to: mail, // list of receivers
+			subject: subject, // Subject line
+			html: htmlContent, // html body
+		});
 
-	console.log("Message sent: %s", info.messageId);
+		console.log("Message sent: %s", info.messageId);
+	} catch (error) {
+		console.log(error);
+	}
 }
 
 const newAppointment = (hairstyle, price, time, date) => ` 
