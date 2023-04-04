@@ -3,8 +3,9 @@ import type { BaseQueryFn } from '@reduxjs/toolkit/query'
 import { setCredentials, logOut } from "../../features/auth/authSlice";
 import { object } from "joi";
 
+// baseUrl: "http://localhost:3333",
 const baseQuery = fetchBaseQuery({
-    baseUrl: "http://localhost:3333",
+    baseUrl: "https://walter-clippers.onrender.com",
     credentials: "include",
     prepareHeaders(headers, { getState }: {getState: ()=> any}) {
         const token:string | null =  getState()?.auth?.token;
