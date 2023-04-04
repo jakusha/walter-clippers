@@ -28,6 +28,7 @@ An API for a salon appointment,built with node, javascript, express, sequelize a
 
 - [x] User Registration
 - [x] Create User Session
+- [x] Payment Gateway using paystack api
 - [x] Refresh User session
 - [x] Delete User Session
 - [x] Create Appointment
