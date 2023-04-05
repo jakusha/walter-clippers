@@ -12,7 +12,6 @@ const calenderRouter = require("./router/calender");
 const Roles = require("./model/Roles");
 const corsOptions = require("./config/corsOption");
 const { verifyJwt } = require("./middlewares/verifyJwt");
-const { verifyRoles } = require("./middlewares/verifyRoles");
 
 //plarse cookies
 app.use(cookieParser());
