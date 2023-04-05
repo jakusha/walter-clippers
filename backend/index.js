@@ -13,13 +13,18 @@ const Roles = require("./model/Roles");
 const corsOptions = require("./config/corsOption");
 const { verifyJwt } = require("./middlewares/verifyJwt");
 
+app.use(
+	cors({
+		origin: ["http://localhost:3000", "https://cutzy-razors.vercel.app/"],
+		credentials: true,
+	})
+);
+// app.use(cors(corsOptions));
 //plarse cookies
 app.use(cookieParser());
 
 //built in expressjs json parser middleware
 app.use(express.json());
-
-app.use(cors(corsOptions));
 
 // logger middleware
 app.use(morgan("dev"));
