@@ -5,9 +5,7 @@ import { object } from "joi";
 
 // baseUrl: "http://localhost:3333",
 const baseQuery = fetchBaseQuery({
-    baseUrl: "https://walter-clippers.onrender.com",
-
-	
+    baseUrl: "https://walterclippers.onrender.com",	
     credentials: "include",
     prepareHeaders(headers, { getState }: {getState: ()=> any}) {
 		headers.set("Content-Type", "application/json")
