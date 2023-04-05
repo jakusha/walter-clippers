@@ -6,6 +6,8 @@ import { object } from "joi";
 // baseUrl: "http://localhost:3333",
 const baseQuery = fetchBaseQuery({
     baseUrl: "https://walter-clippers.onrender.com",
+
+	
     credentials: "include",
     prepareHeaders(headers, { getState }: {getState: ()=> any}) {
         const token:string | null =  getState()?.auth?.token;
