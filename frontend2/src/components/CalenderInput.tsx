@@ -42,6 +42,7 @@ const CalenderInput = ({ setCurrentDate, formData  }: {setCurrentDate: (date:str
 		let updatedDate = splitDate.join("-")
 		return new Date(updatedDate).toLocaleDateString() === new Date(formData.date).toLocaleDateString()
 	}
+
 	let calenderContent = data?.calender?.map((value:any) => (
 		<div
 			className={`border-2 border-red-100 p-4 grid place-content-center ${
@@ -70,6 +71,7 @@ const CalenderInput = ({ setCurrentDate, formData  }: {setCurrentDate: (date:str
 			{value?.day}
 		</div>
 	));
+
 
 	function next(number:number) {
 		if (number < 11) {
@@ -171,7 +173,34 @@ const CalenderInput = ({ setCurrentDate, formData  }: {setCurrentDate: (date:str
 						<svg xmlns="http://www.w3.org/2000/svg" className="ionicon w-6 h-6" viewBox="0 0 512 512"><title>Chevron Forward</title><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M184 112l144 144-144 144"/></svg>
 					</div>
 				</div>
-				<div className="border-2 border-blue-4 grid grid-cols-7 grid-rows-6">
+				{isLoading ? <div className="h-[30vh] bg-slate-200 animate-pulse border-2 border-blue-4 ">
+
+					<div className="flex justify-between px-2 ">
+					<div className="py-2 grid place-content-center font-semibold">
+						Su
+					</div>
+					<div className="py-2 grid place-content-center font-semibold">
+						Mo
+					</div>
+					<div className="py-2 grid place-content-center font-semibold">
+						Tu
+					</div>
+					<div className="py-2 grid place-content-center font-semibold">
+						We
+					</div>
+					<div className="py-2 grid place-content-center font-semibold">
+						Th
+					</div>
+					<div className="py-2 grid place-content-center font-semibold">
+						Fr
+					</div>
+					<div className="py-2 grid place-content-center font-semibold">
+						Sa
+					</div>
+
+					</div>
+				</div>: 
+				<div className="border-2 border-blue-4 grid grid-cols-7 grid-rows-6">				
 				<div className="py-2 grid place-content-center font-semibold">
 						Su
 					</div>
@@ -194,10 +223,13 @@ const CalenderInput = ({ setCurrentDate, formData  }: {setCurrentDate: (date:str
 						Sa
 					</div>
 					{calenderContent}
+					
 				</div>
+				}
 			</div>
 		</div>
 	);
 };
 
 export default CalenderInput;
+

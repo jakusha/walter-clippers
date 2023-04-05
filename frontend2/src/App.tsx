@@ -9,6 +9,7 @@ import History from "./features/dashboard/History";
 import DetermineDashboard from "./features/dashboard/DetermineDashboard";
 import HairStyle from "./features/dashboard/HairStyle";
 import SignUp from "./features/auth/SignUp";
+import AdminAnalytics from "./features/dashboard/AdminAnalytics";
 
 function App() {
 	return (
@@ -46,6 +47,16 @@ function App() {
 								<HairStyle />
 							</RequireAuth>
 						</PersistLogin>
+					}
+				/>
+				<Route
+					path="/analytics"
+					element={
+						<PersistLogin>
+						<RequireAuth allowedRoles={[3232]}>
+							<AdminAnalytics />
+						</RequireAuth>
+					</PersistLogin>
 					}
 				/>
 				

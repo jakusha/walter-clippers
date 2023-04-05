@@ -201,7 +201,7 @@ const AppointmentForm = ({ currentDate, previosData = null }: AppointmentFormPro
 		let value = {
 			
 			email: customer?.email,
-			amount: getHairStylePrice(validForm.hairStyleId)?.price, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
+			amount: parseInt(getHairStylePrice(validForm.hairStyleId)?.price) * 100, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
 			publicKey: 'pk_test_a828faee19c13415169bd229e73b3d1b89dd4c3a',
 			text: "Pay now",
 			onSuccess:  (payment: any)=> {
@@ -237,8 +237,8 @@ const AppointmentForm = ({ currentDate, previosData = null }: AppointmentFormPro
 		// console.log(validForm)
 		
 		content = <div>
-			<h2>pay for haircut</h2>
-			<PaystackButton  {...value}/>
+			<h2 className="text-xl font-semibold capitalize text-center">pay for haircut</h2>
+			<PaystackButton  {...value} className="bg-blue-4 text-white p-4 mx-auto w-30 block my-4"/>
 		</div>
 	} else {
 		content = (
@@ -273,7 +273,9 @@ const AppointmentForm = ({ currentDate, previosData = null }: AppointmentFormPro
 						</div>
 						<div className="flex flex-col gap-1">
 							<span className="text-lg capitalize w-20">time:</span>
-							<TimeInput timeData={timeData} handleTime={handleTime} formData={formData}/>
+							{timeLoading ?  <div className="h-[20vh] bg-slate-200 animate-pulse border-2 border-blue-4"> 
+
+							</div>: <TimeInput timeData={timeData} handleTime={handleTime} formData={formData}/>}
 						</div>
 					</div>
 					<button className={` text-white-2  mx-auto flex items-center justify-center p-2 px-4 ${message.type === "error" ? "animate-shake bg-red-600 text-white": "bg-blue-4"}`}>confirm</button>

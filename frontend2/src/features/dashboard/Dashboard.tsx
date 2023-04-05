@@ -57,7 +57,6 @@ const Dashboard = () => {
 		{} as CurrentAppointmentDate
 	);
 	// console.log(currentAppointmentDate, "");
-
 	const [
 		generateCalender,
 		{
@@ -104,7 +103,8 @@ const Dashboard = () => {
 	} else if (calenderError) {
 		content = <div>An error occured</div>;
 	} else if (calenderData) {
-		content = (
+		content = calenderData?.result.length < 1  ? <div className="text-lg capitalize text-center ">no appointment this month ;)</div>: 
+		 (
 			<div className="grid grid-cols-1 auto-rows-max xl:grid-cols-2 row-auto gap-2 mb-10 lg:text-lg h-[40vh] overflow-auto scrollbar:!w-1.5 scrollbar:!h-1.5 scrollbar:bg-transparent scrollbar-track:!bg-slate-97 scrollbar-thumb:!rounded scrollbar-thumb:!bg-slate-300 scrollbar-track:!rounded dark:scrollbar-track:!bg-slate-500/[0.16] dark:scrollbar-thumb:!bg-slate-500/50 max-h-96 lg:supports-scrollbars:pr-2">
 				{calenderData?.result
 					.filter(
@@ -148,7 +148,7 @@ const Dashboard = () => {
 					</button>
 				</div>
 			</nav>
-			<div className="px-3 md:px-20 lg:px-12">
+			<div className="px-3 md:px-20 lg:px-12 pb-10 md:pb-0">
 				<h1 className="text-xl md:text-2xl mt-4 font-bold">
 					Welcome back, {customer?.username}
 				</h1>
@@ -186,9 +186,9 @@ const Dashboard = () => {
 									<path
 										fill="none"
 										stroke="currentColor"
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="32"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth="32"
 										d="M256 112v288M400 256H112"
 									/>
 								</svg>
@@ -224,9 +224,9 @@ const Dashboard = () => {
 											<path
 												fill="none"
 												stroke="currentColor"
-												stroke-linecap="round"
-												stroke-linejoin="round"
-												stroke-width="32"
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												strokeWidth="32"
 												d="M368 368L144 144M368 144L144 368"
 											/>
 										</svg>

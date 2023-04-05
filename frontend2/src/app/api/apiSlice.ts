@@ -3,12 +3,12 @@ import type { BaseQueryFn } from '@reduxjs/toolkit/query'
 import { setCredentials, logOut } from "../../features/auth/authSlice";
 import { object } from "joi";
 
-// baseUrl: "http://localhost:3333",
 const baseQuery = fetchBaseQuery({
-    baseUrl: "https://walterclippers.onrender.com",	
+	baseUrl: "https://walterclippers.onrender.com/",	
+	// baseUrl: "http://localhost:3000",
     credentials: "include",
     prepareHeaders(headers, { getState }: {getState: ()=> any}) {
-		headers.set("Content-Type", "application/json")
+		// headers.set("Content-Type", "application/json")
         const token:string | null =  getState()?.auth?.token;
         if(token) {
             headers.set("Authorization", `Bearer ${token}`);

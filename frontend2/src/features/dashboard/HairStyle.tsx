@@ -192,7 +192,7 @@ const HairStyle = () => {
 			{newHairStyleModal &&
 				createPortal(
 					<div className="bg-[rgba(0,0,0,.2)] border-2 border-red-300 absolute top-0 left-0 right-0 h-screen w-screen p-4 py-6 z-20">
-						<div className="h-[50vh] sm:w-4/6 mx-auto md:max-w-lg  bg-slate-50  relative p-4">
+						<div className="h-[40vh] sm:w-4/6 mx-auto md:max-w-lg  bg-slate-50  relative p-4">
 							<div>
 								<h3 className="basis-3/6  capitalize text-xl lg:text-2xl text-center pt-6">
 									{updating ? "update hairstyle" : "add new hairstyle"}
@@ -220,7 +220,7 @@ const HairStyle = () => {
 							</div>
 							<form onSubmit={submitHandler}>
 								<div className="text-red-500 text-base capitalize text-center ">{errorMsg}</div>
-								<div className="flex">
+								<div className="flex mb-4">
 									<label
 										htmlFor="name"
 										className="text-lg capitalize w-20"
@@ -232,7 +232,7 @@ const HairStyle = () => {
 										onChange={handleChange}
 										id="name"
 										required
-										className="w-full capitalize py-1"
+										className="w-full capitalize py-1 border-2 border-blue-4 px-2"
 									/>
 								</div>
 								<div className="flex">
@@ -244,7 +244,7 @@ const HairStyle = () => {
 										onChange={handleChange}
 										id="price"
 										required
-										className="w-full capitalize py-1"
+										className="w-full capitalize py-1 border-2 border-blue-4 px-2"
 									/>
 								</div>
 								<button className="bg-blue-4 text-white-2  flex items-center justify-center p-2 px-4 my-4 cursor-pointer mx-auto">

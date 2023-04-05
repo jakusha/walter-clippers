@@ -24,7 +24,11 @@ const SignUp = () => {
 		email: "",
 	});
 	const [message, setMessage] = useState<Message>({ type: "", value: "" });
-	const [signup] = useSignupMutation();
+	const [signup, status] = useSignupMutation();
+
+	// console.log(status)
+
+
 
 	useEffect(() => {
 		const timeOut = setTimeout(() => {
@@ -68,6 +72,28 @@ const SignUp = () => {
 			password: "",
 			email: "",
 		});
+	}
+
+	let buttonEl;
+
+	if (status?.isLoading) {
+		buttonEl = <button className={`bg-teal-300  text-blue-4
+		p-2 px-8 text-xl my-4 font-semibold  mx-auto block w-max flex gap-2`}>
+			<svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+			loading...</button>
+	}else {
+		buttonEl = <button
+						className={`bg-blue-500 text-blue-4
+						p-2 px-8 text-xl my-4 font-semibold  mx-auto block w-max 
+						${message.type === "error" && "animate-shake bg-red-600 text-white"}
+						${message.type === "success" && "bg-green-500 text-white"}
+                    `}
+					>
+						Signup
+					</button>
 	}
 	return (
 		<div className="relative font-montserrat bg-blue-4 h-screen text-white-3">
@@ -170,15 +196,7 @@ const SignUp = () => {
 					>
 						Already have an account? Login.
 					</Link>
-					<button
-						className={`bg-blue-500 text-blue-4
-						p-2 px-8 text-xl my-4 font-semibold  mx-auto block w-max 
-						${message.type === "error" && "animate-shake bg-red-600 text-white"}
-						${message.type === "success" && "bg-green-500 text-white"}
-                    `}
-					>
-						Signup
-					</button>
+					{buttonEl}
 				</form>
 			</div>
 		</div>

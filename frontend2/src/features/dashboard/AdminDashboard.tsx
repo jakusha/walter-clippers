@@ -142,6 +142,7 @@ const AdminDashboard = () => {
 					/>
 				</span>
 				<div className="flex gap-2 lg:gap-4 text-base  capitalize">
+					<Link to={"/analytics"}>Analytics</Link>
 					<Link to={"/history"}>history</Link>
 					<Link to={"/hairstyle"}>new Hairstyle</Link>
 
@@ -173,7 +174,7 @@ const AdminDashboard = () => {
 
 						{appointmentInfoModal &&
 							createPortal(
-								<div className="bg-[rgba(0,0,0,.2)] border-2 absolute top-0 left-0 right-0 h-screen w-screen p-4 py-6 z-40">
+								<div className="bg-[rgba(0,0,0,.2)] border-2 absolute top-0 left-0 right-0 h-screen w-screen p-4 py-6 z-40 animate-modal">
 									<AdminAppointmentInfo
 										currentAppointmentDate={
 											currentAppointmentDate

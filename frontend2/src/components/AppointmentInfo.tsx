@@ -76,7 +76,7 @@ const AppointmentInfo = ({
 						onClick={() => setAppointmentInfoModal(false)}
 						className="basis-1/4 p-1 absolute top-0 right-0"
 					>
-						<svg xmlns="http://www.w3.org/2000/svg" className="ionicon w-10 h-10 text-red-400" viewBox="0 0 512 512"><title>Close</title><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368L144 144M368 144L144 368"/></svg>
+						<svg xmlns="http://www.w3.org/2000/svg" className="ionicon w-10 h-10 text-red-400" viewBox="0 0 512 512"><title>Close</title><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="32" d="M368 368L144 144M368 144L144 368"/></svg>
 					</button>
 				</div>
 				<AppointmentForm
@@ -103,7 +103,7 @@ const AppointmentInfo = ({
 						onClick={() => setAppointmentInfoModal(false)}
 						className="basis-1/4 p-1 absolute top-0 right-0"
 					>
-						<svg xmlns="http://www.w3.org/2000/svg" className="ionicon w-10 h-10 text-red-400" viewBox="0 0 512 512"><title>Close</title><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368L144 144M368 144L144 368"/></svg>
+						<svg xmlns="http://www.w3.org/2000/svg" className="ionicon w-10 h-10 text-red-400" viewBox="0 0 512 512"><title>Close</title><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="32" d="M368 368L144 144M368 144L144 368"/></svg>
 					</button>
 				<img src={confetti} alt="confetti image" className="w-30 h-30 mx-auto mb-10"/>
 				<p className="text-xl capitalize">{fetchSuccess}</p>
@@ -118,7 +118,7 @@ const AppointmentInfo = ({
 						onClick={() => setAppointmentInfoModal(false)}
 						className="basis-1/4 p-1 absolute top-0 right-0 cursor-pointer"
 					>
-						<svg xmlns="http://www.w3.org/2000/svg" className="ionicon w-10 h-10 text-red-400" viewBox="0 0 512 512"><title>Close</title><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368L144 144M368 144L144 368"/></svg>
+						<svg xmlns="http://www.w3.org/2000/svg" className="ionicon w-10 h-10 text-red-400" viewBox="0 0 512 512"><title>Close</title><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="32" d="M368 368L144 144M368 144L144 368"/></svg>
 					</div>
 				<h2>are you sure you want to cancel appointment ? </h2>
 				<button
@@ -149,7 +149,7 @@ const AppointmentInfo = ({
 						onClick={() => setAppointmentInfoModal(false)}
 						className="basis-1/4 p-1 absolute top-0 right-0"
 					>
-						<svg xmlns="http://www.w3.org/2000/svg" className="ionicon w-10 h-10 text-red-400" viewBox="0 0 512 512"><title>Close</title><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368L144 144M368 144L144 368"/></svg>
+						<svg xmlns="http://www.w3.org/2000/svg" className="ionicon w-10 h-10 text-red-400" viewBox="0 0 512 512"><title>Close</title><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="32" d="M368 368L144 144M368 144L144 368"/></svg>
 					</button>
 				</div>
 				<div className="p-4 capitalize">

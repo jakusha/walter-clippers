@@ -172,29 +172,29 @@ const AdminAppointmentInfo = ({
 					</button>
 				</div>
 				<div className="p-4 capitalize">
-				<div className="flex">
-				<span className="text-lg  w-20">customer:</span>
+				<div className="flex items-center">
+				<span className="text-lg  w-24">customer:</span>
 						<span>{
 							currentAppointmentDate?.appointmentInfo[0]?.Customer
 								?.username
 						}</span>
-					</div>
+				</div>
 					<div className="flex">
-					<span className="text-lg  w-20">style:</span>
+					<span className="text-lg  w-24">style:</span>
 						<span className="">{style}</span>
 					</div>
 					<div className="flex">
-					<span className="text-lg  w-20">price:</span>
+					<span className="text-lg  w-24">price:</span>
 						<span className="">{price}</span>
 						</div>
 						<div className="flex">
-						<span className="text-lg  w-20">date:</span>
+						<span className="text-lg  w-24">date:</span>
 						<span className="">
 							{currentAppointmentDate?.appointmentInfo[0]?.date}
 						</span>
 					</div>
 					<div className="flex">
-						<span className="text-lg  w-20">time:</span>
+						<span className="text-lg  w-24">time:</span>
 						<span className="">
 							{currentAppointmentDate?.appointmentInfo[0]?.time.slice(
 								0,
@@ -203,7 +203,7 @@ const AdminAppointmentInfo = ({
 						</span>
 					</div>
 				</div>
-				<div className="flex justify-between p-4">
+				{/* <div className="flex justify-between p-4">
 				<span
 						onClick={() => setReschedule(true)}
 						className="bg-blue-4 text-white-2  flex items-center justify-center p-2"
@@ -217,7 +217,7 @@ const AdminAppointmentInfo = ({
 					>
 						cancel appointment
 					</span>
-				</div>
+				</div> */}
 			</div>
 		);
 	}

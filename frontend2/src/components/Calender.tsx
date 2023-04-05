@@ -48,7 +48,7 @@ const Calender = ({
 
 
 	if(isLoading) {
-		calenderContent  =  new Array(31).fill(null).map(()=><div className="animate-pulse bg-slate-200"> </div>)
+		calenderContent  =  new Array(31).fill(null).map(()=><div className="animate-pulse bg-slate-200" key={uuidv4()}> </div>)
 	}else {
 		
 	calenderContent = data?.calender?.map((value: any) => (
@@ -154,7 +154,7 @@ const Calender = ({
 						onClick={() => previous(monthInput)}
 						disabled={validPrevious()}
 					>
-						<svg xmlns="http://www.w3.org/2000/svg" className="ionicon w-6 h-6 md:w-8 md:h-8" viewBox="0 0 512 512"><title>Chevron Back</title><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M328 112L184 256l144 144"/></svg>
+						<svg xmlns="http://www.w3.org/2000/svg" className="ionicon w-6 h-6 md:w-8 md:h-8" viewBox="0 0 512 512"><title>Chevron Back</title><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="48" d="M328 112L184 256l144 144"/></svg>
 					</button>
 
 					<div className="text-lg">
@@ -175,7 +175,7 @@ const Calender = ({
 						className="p-2"
 						onClick={() => next(monthInput)}
 					>
-						<svg xmlns="http://www.w3.org/2000/svg" className="ionicon w-6 h-6 md:w-8 md:h-8" viewBox="0 0 512 512"><title>Chevron Forward</title><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M184 112l144 144-144 144"/></svg>
+						<svg xmlns="http://www.w3.org/2000/svg" className="ionicon w-6 h-6 md:w-8 md:h-8" viewBox="0 0 512 512"><title>Chevron Forward</title><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="48" d="M184 112l144 144-144 144"/></svg>
 					</button>
 				</div>
 				<div className=" grid grid-cols-7 grid-rows-5 gap-4 md:text-lg">
