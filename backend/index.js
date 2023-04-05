@@ -13,35 +13,7 @@ const Roles = require("./model/Roles");
 const corsOptions = require("./config/corsOption");
 const { verifyJwt } = require("./middlewares/verifyJwt");
 
-app.use(function (req, res, next) {
-	// res.header("Access-Control-Allow-Origin", "*");
-	const allowedOrigins = [
-		"http://localhost:3000",
-		"https://cutzy-razors.vercel.app/",
-	];
-	const origin = req.headers.origin;
-	if (allowedOrigins.includes(origin)) {
-		res.setHeader("Access-Control-Allow-Origin", origin);
-	}
-	res.header(
-		"Access-Control-Allow-Headers",
-		"Origin, X-Requested-With, Content-Type, Accept, Authorization"
-	);
-	res.header("Access-Control-Allow-credentials", true);
-	res.header(
-		"Access-Control-Allow-Methods",
-		"GET, POST, PUT, DELETE, UPDATE"
-	);
-	next();
-});
-
-// app.use(
-// 	cors({
-// 		origin: ["http://localhost:3000", "https://cutzy-razors.vercel.app/"],
-// 		credentials: true,
-// 	})
-// );
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 //plarse cookies
 app.use(cookieParser());
 
