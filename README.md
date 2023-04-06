@@ -1,8 +1,8 @@
 # 👋 Welcome To  `Walter Clippers`
 
 <p align="center">
-    <a href="https://cutzy-razors.vercel.app/" target="blank"/>
-        ![Web capture_6-4-2023_222322_cutzy-razors vercel app](https://user-images.githubusercontent.com/53101939/230497899-96846dda-5038-4425-ab39-f2ce07572fed.jpeg)
+    <a href="https://cutzy-razors.vercel.app/" target="blank">
+        <img src="https://user-images.githubusercontent.com/53101939/230497899-96846dda-5038-4425-ab39-f2ce07572fed.jpeg" />
     </a>
 </p>
 
