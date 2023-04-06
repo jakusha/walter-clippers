@@ -242,6 +242,11 @@ async function handleDeleteAppointment(req, res) {
 	try {
 		const result = await Appointment.findByPk(appointmentId);
 		if (result) {
+			await Transactions.destroy({
+				where: {
+					appointmentId: appointmentId,
+				},
+			});
 			await Appointment.destroy({
 				where: {
 					appointmentId: appointmentId,
