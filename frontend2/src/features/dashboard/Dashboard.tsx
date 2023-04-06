@@ -237,6 +237,7 @@ const Dashboard = () => {
 										currentDate={new Date()
 											.toISOString()
 											.slice(0, 10)}
+											
 									/>
 								</div>
 							</div>

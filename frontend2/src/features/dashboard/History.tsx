@@ -127,7 +127,7 @@ const History = () => {
 						onClick={() => setAppointmentInfoModal(false)}
 						className="basis-1/4 p-1 absolute top-0 right-0"
 					>
-						<svg xmlns="http://www.w3.org/2000/svg" className="ionicon w-10 h-10 text-red-400" viewBox="0 0 512 512"><title>Close</title><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368L144 144M368 144L144 368"/></svg>
+						<svg xmlns="http://www.w3.org/2000/svg" className="ionicon w-10 h-10 text-red-400" viewBox="0 0 512 512"><title>Close</title><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="32" d="M368 368L144 144M368 144L144 368"/></svg>
 					</button>
 				</div>
 							<div className="p-4 capitalize">

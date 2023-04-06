@@ -8,7 +8,6 @@ const currentYear = getCurrentYear();
 const currentMonth = getCurrentMonth();
 
 
-
 interface FormDataState {
 	hairStyleId: string;
 	date: string;
@@ -149,7 +148,7 @@ const CalenderInput = ({ setCurrentDate, formData  }: {setCurrentDate: (date:str
 						onClick={() => previous(monthInput)}
 						
 					>
-						<svg xmlns="http://www.w3.org/2000/svg" className="ionicon w-6 h-6" viewBox="0 0 512 512"><title>Chevron Back</title><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M328 112L184 256l144 144"/></svg>
+						<svg xmlns="http://www.w3.org/2000/svg" className="ionicon w-6 h-6" viewBox="0 0 512 512"><title>Chevron Back</title><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="48" d="M328 112L184 256l144 144"/></svg>
 					</div>
 
 					<h3 className="text-lg flex gap-2 mx-1">
@@ -170,7 +169,7 @@ const CalenderInput = ({ setCurrentDate, formData  }: {setCurrentDate: (date:str
 						className="p-2 "
 						onClick={() => next(monthInput)}
 					>
-						<svg xmlns="http://www.w3.org/2000/svg" className="ionicon w-6 h-6" viewBox="0 0 512 512"><title>Chevron Forward</title><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M184 112l144 144-144 144"/></svg>
+						<svg xmlns="http://www.w3.org/2000/svg" className="ionicon w-6 h-6" viewBox="0 0 512 512"><title>Chevron Forward</title><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="48" d="M184 112l144 144-144 144"/></svg>
 					</div>
 				</div>
 				{isLoading ? <div className="h-[30vh] bg-slate-200 animate-pulse border-2 border-blue-4 ">

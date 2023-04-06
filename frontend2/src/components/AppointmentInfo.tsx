@@ -46,22 +46,49 @@ const AppointmentInfo = ({
 			currentAppointmentDate?.appointmentInfo[0]?.hairStyleId
 	)?.name;
 	const [reschedule, setReschedule] = useState(false);
-	const [deleteApppointment] = useDeleteApppointmentMutation();
+	const [deleteApppointment, status] = useDeleteApppointmentMutation();
 	const [deleteModal, setDeleteModal] = useState(false);
 	const [fetchSuccess, setFetchSuccess] = useState();
 	async function handleDeleteAppointment(appointmentId:string) {
+		
 		try {
 			const result = await deleteApppointment(appointmentId).unwrap();
-
+			
 			if (result.message) {
 				setFetchSuccess(result.message);
 			}
-			// console.log(result, "RESULT FROM DELETING!!!!!!");
+			
 		} catch (error) {
+			
 			console.error(error);
 		}
 	}
 
+
+	let buttonEl;
+
+	if(status?.isLoading) {
+		buttonEl = <button className={`bg-red-600  text-white
+		p-2 px-8 text-xl my-4 font-semibold  mx-auto block w-max flex gap-2`}>
+			<svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+			deleting...</button>
+	}else {
+		buttonEl = <button
+		className="bg-red-600 text-white p-2 px-4 my-2 cursor-pointer
+"
+		onClick={() =>
+			handleDeleteAppointment(
+				currentAppointmentDate?.appointmentInfo[0]
+					?.appointmentId
+			)
+		}
+	>
+		cancel appointment
+	</button>
+	}
 	let content;
 	if (reschedule) {
 		content = (
@@ -121,18 +148,7 @@ const AppointmentInfo = ({
 						<svg xmlns="http://www.w3.org/2000/svg" className="ionicon w-10 h-10 text-red-400" viewBox="0 0 512 512"><title>Close</title><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="32" d="M368 368L144 144M368 144L144 368"/></svg>
 					</div>
 				<h2>are you sure you want to cancel appointment ? </h2>
-				<button
-					className="bg-red-600 text-white p-2 px-4 my-2 cursor-pointer
-			"
-					onClick={() =>
-						handleDeleteAppointment(
-							currentAppointmentDate?.appointmentInfo[0]
-								?.appointmentId
-						)
-					}
-				>
-					cancel appointment
-				</button>
+				{buttonEl}
 			</div>
 			</div>
 
