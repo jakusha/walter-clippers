@@ -41,6 +41,7 @@ An API for a salon appointment,built with node, javascript, express, sequelize a
 - [x] Update Hairstyle
 - [x] Delete Hairstyle
 - [x] Get Hairstyle
+- [x] Analytics
 
 ### 📮Making requests
 
