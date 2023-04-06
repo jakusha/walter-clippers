@@ -105,6 +105,11 @@ export const appointmentApiSlice = apiSlice.injectEndpoints({
 			},
 			invalidatesTags: ["Appointment"]
 		}),
+		analytics: builder.query({
+			query: () =>
+				`/analytics`,
+		
+		})
 	}),
 });
 
@@ -118,5 +123,6 @@ export const {
 	useUpdateAppointmentMutation,
 	useDeleteApppointmentMutation,
 	useUpdateHairStyleMutation,
-	useCreateNewHairStyleMutation
+	useCreateNewHairStyleMutation,
+	useAnalyticsQuery
 } = appointmentApiSlice;
