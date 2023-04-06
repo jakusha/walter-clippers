@@ -21,6 +21,7 @@ Please access Walter Clippers using the URL:
 - PosgreSql
 - Axios
 - Nodemailer
+- Paystack API
 - Vercel (Frontend Hosting)
 - Render (Backend Hosting)
 - ElephantSql (Postgresql Hosting)
