@@ -1,7 +1,7 @@
 # 👋 Welcome To  `Walter Clippers`
 
 <p align="center">
-    <a href="https://cutzy-razors.vercel.app/" target="blank">
+    <a href="https://walter-clippers.vercel.app/" target="blank">
         <img src="https://user-images.githubusercontent.com/53101939/230497899-96846dda-5038-4425-ab39-f2ce07572fed.jpeg" />
     </a>
 </p>
@@ -11,7 +11,7 @@
 # 💻 Use Walter Clippers
 Please access Walter Clippers using the URL:
 
-> https://cutzy-razors.vercel.app/
+> https://walter-clippers.vercel.app/
 
 # 🚀 Built With
 - React JS
@@ -20,6 +20,7 @@ Please access Walter Clippers using the URL:
 - Express JS 
 - PosgreSql
 - Axios
+- Nodemailer
 - Vercel (Frontend Hosting)
 - Render (Backend Hosting)
 - ElephantSql (Postgresql Hosting)
