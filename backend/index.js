@@ -9,6 +9,7 @@ const appointmentRouter = require("./router/appointment");
 const hairStyleRouter = require("./router/hairstyle");
 const authRouter = require("./router/authentication");
 const calenderRouter = require("./router/calender");
+const analyticsRouter = require("./router/analytics");
 const Roles = require("./model/Roles");
 const corsOptions = require("./config/corsOption");
 const { verifyJwt } = require("./middlewares/verifyJwt");
@@ -35,6 +36,7 @@ app.use("/appointment", verifyJwt, appointmentRouter);
 app.use("/hairstyle", verifyJwt, hairStyleRouter);
 app.use("/auth", authRouter);
 app.use("/calender", verifyJwt, calenderRouter);
+app.use("/analytics", verifyJwt, analyticsRouter);
 
 const port = process.env.PORT;
 
@@ -43,7 +45,6 @@ const startDb = async () => {
 	try {
 		await db.authenticate();
 		await db.sync();
-		console.log("Connection has been established successfully.");
 		app.listen(port, () => {
 			console.log(`app listening at PORT ${port}`);
 		});
