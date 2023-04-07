@@ -26,6 +26,15 @@ Please access Walter Clippers using the URL:
 - Render (Backend Hosting)
 - ElephantSql (Postgresql Hosting)
 
-# 🔥 Repos
+# 🔥 Features
+ - ✨ Reserve, update, cancel appointments.
+ - 📢 Email notifications
+ - 🔑 Authentication
+ - 📊 Analytics
+ - 📱  Responsiveness
+ - 💳 Payment Gateway
+ 
+
+# 🧱 Repos
 - [Frontend Repo](https://github.com/jakusha/cutzy-razors/tree/main/frontend2)
 - [Backend Repo](https://github.com/jakusha/cutzy-razors/tree/main/backend)
