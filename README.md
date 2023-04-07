@@ -13,6 +13,14 @@ Please access Walter Clippers using the URL:
 
 > https://walter-clippers.vercel.app/
 
+# 🔥 Features
+ - ✨ Reserve, update, cancel appointments.
+ - 📢 Email notifications
+ - 🔑 Authentication
+ - 📊 Analytics
+ - 📱  Responsiveness
+ - 💳 Payment Gateway
+
 # 🚀 Built With
 - React JS
 - Redux 
@@ -25,15 +33,6 @@ Please access Walter Clippers using the URL:
 - Vercel (Frontend Hosting)
 - Render (Backend Hosting)
 - ElephantSql (Postgresql Hosting)
-
-# 🔥 Features
- - ✨ Reserve, update, cancel appointments.
- - 📢 Email notifications
- - 🔑 Authentication
- - 📊 Analytics
- - 📱  Responsiveness
- - 💳 Payment Gateway
- 
 
 # 🧱 Repos
 - [Frontend Repo](https://github.com/jakusha/cutzy-razors/tree/main/frontend2)
