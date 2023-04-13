@@ -8,6 +8,7 @@
     <img src="https://user-images.githubusercontent.com/53101939/231737755-0001d291-b32f-466c-b85c-04ba6277b07f.png" />
     <img src="https://user-images.githubusercontent.com/53101939/231737777-3798b665-5873-4a51-8c2c-54fcc96d12a5.png" />
     <img src="https://user-images.githubusercontent.com/53101939/231737787-0ff425d5-e3b2-4172-854e-8be0c19dbada.png" />
+    <img src="https://user-images.githubusercontent.com/53101939/231739017-acd824cc-6df3-4b4c-8373-9108b4b9c14a.png" />
 </p>
 
 `Walter Clippers` is an app for booking haircuts with your barber, Walter. The app is user-friendly and allows you to schedule appointments, receive notifications, and manage bookings. You can choose available dates and services. The app also lets you view your appointment history, reschedule or cancel appointments
