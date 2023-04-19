@@ -9,8 +9,8 @@ import {schema} from "../../joiValidations/login"
 
 const Login = () => {
 	const [inputValue, setInputValue] = useState({
-		username: "",
-		password: "",
+		username: "berry123",
+		password: "password",
 	});
 	const [error, setError] = useState("");
 	

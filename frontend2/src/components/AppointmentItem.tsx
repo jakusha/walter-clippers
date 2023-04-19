@@ -44,8 +44,8 @@ const AppointmentItem = ({
 		<div className="py-4 p-2 flex justify-between shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]  capitalize h-16 ">
 			<span>{appointment?.date} {style} </span>{" "}
 			<span
-				onClick={() => {
-					
+				onClick={(e) => {
+					e.stopPropagation(); 
 					let data:any = appointment 
 					setCurrentAppointmentDate({appointmentInfo: [{...data}]});
 					setAppointmentInfoModal(true);

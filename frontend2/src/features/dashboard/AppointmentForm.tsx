@@ -14,7 +14,7 @@ import { DateTime } from "luxon";
 import { schema } from "../../joiValidations/createAppointment";
 import { selectAuthCustomer } from "../auth/authSlice";
 import confetti from "../../assets/Confetti.png";
-import { usePaystackPayment, PaystackButton } from "react-paystack";
+import {  PaystackButton } from "react-paystack";
 interface AppointmentFormProp {
 	currentDate?: string;
 	previosData?: null | FormDataState;
@@ -36,14 +36,8 @@ const AppointmentForm = ({
 	currentDate,
 	previosData = null,
 }: AppointmentFormProp) => {
-	const [config, setConfig] = useState({});
 	const customer = useSelector(selectAuthCustomer);
-	const initializePayment = usePaystackPayment({
-		reference: new Date().getTime().toString(),
-		email: "aaronebube123@gmail.com",
-		amount: 20000, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
-		publicKey: "pk_test_a828faee19c13415169bd229e73b3d1b89dd4c3a",
-	});
+
 
 	const [formData, setFormData] = useState<FormDataState>(
 		(): FormDataState => {
@@ -103,8 +97,7 @@ const AppointmentForm = ({
 	);
 
 	function getHairStylePrice(hairId: string): null | HairStyle {
-		// console.log(hairId, "HAIR ID INFOOO!!!!!!!!!!!!!1");
-		// console.log(hairData);
+		
 		if (hairId) {
 			const result: any = hairData?.hairStyles?.find(
 				(hair: HairStyle) => hair.hairStyleId === hairId
